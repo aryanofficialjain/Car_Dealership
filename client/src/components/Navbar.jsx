@@ -1,19 +1,14 @@
 // Navbar.js
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { Context } from "../context/Context";
 
 const Navbar = () => {
+  const { token } = useContext(Context);
+
   return (
-    <nav className="bg-black p-4 flex justify-center items-center relative">
-      <div className="absolute inset-0 z-0">
-        <img
-          className="w-full h-full object-cover"
-          src="/path/to/your/car/image.jpg"
-          alt="Car Background"
-        />
-        <div className="bg-black opacity-75 absolute inset-0 z-10"></div>
-      </div>
+    <nav className="bg-gray-900 p-4 flex justify-center items-center relative">
       <div className="relative z-20">
         <ul className="flex space-x-4">
           <li>
@@ -21,16 +16,28 @@ const Navbar = () => {
               Home
             </Link>
           </li>
-          <li>
-            <Link to="/signup" className="text-white hover:text-gray-300">
-              Sign Up
-            </Link>
-          </li>
-          <li>
-            <Link to="/login" className="text-white hover:text-gray-300">
-              Login
-            </Link>
-          </li>
+          {token ? (
+            <>
+            <li>
+              <Link to="/profile" className="text-white hover:text-gray-300">
+                Profile
+              </Link>
+            </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <Link to="/signup" className="text-white hover:text-gray-300">
+                  Sign Up
+                </Link>
+              </li>
+              <li>
+                <Link to="/login" className="text-white hover:text-gray-300">
+                  Login
+                </Link>
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

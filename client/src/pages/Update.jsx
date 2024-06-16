@@ -2,16 +2,17 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const Update = () => {
   const [error, setError] = useState(null);
-  const { token, setToken } = useContext(Context);
+  const { token } = useContext(Context);
   const navigate = useNavigate();
-  const [formdata, setFormData] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     username: "",
     role: "user",
-    profileImage: null, // Changed from 'file' to 'profileImage'
+    profileImage: null,
     oldpassword: "",
     newpassword: "",
   });
@@ -28,16 +29,15 @@ const Update = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formdata);
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append("email", formdata.email);
-      formDataToSend.append("username", formdata.username);
-      formDataToSend.append("role", formdata.role);
-      formDataToSend.append("oldpassword", formdata.oldpassword);
-      formDataToSend.append("newpassword", formdata.newpassword);
-      if (formdata.profileImage) { // Changed from 'file' to 'profileImage'
-        formDataToSend.append("profileImage", formdata.profileImage);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("username", formData.username);
+      formDataToSend.append("role", formData.role);
+      formDataToSend.append("oldpassword", formData.oldpassword);
+      formDataToSend.append("newpassword", formData.newpassword);
+      if (formData.profileImage) {
+        formDataToSend.append("profileImage", formData.profileImage);
       }
 
       const response = await axios.put(
@@ -53,66 +53,97 @@ const Update = () => {
       console.log(response.data);
       if (response.status === 200) {
         navigate("/profile");
-    }} catch (error) {
-      console.log(error);
+      }
+    } catch (error) {
+      console.error("Update failed:", error);
       setError(error);
+    }
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <div>Update</div>
-        <input
-          type="text"
-          placeholder="Username"
-          id="username"
-          name="username"
-          value={formdata.username}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          id="email"
-          name="email"
-          value={formdata.email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          placeholder="Old Password"
-          id="oldpassword"
-          name="oldpassword"
-          value={formdata.oldpassword}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          placeholder="New Password"
-          id="newpassword"
-          name="newpassword"
-          value={formdata.newpassword}
-          onChange={handleChange}
-        />
-
-        <br />
-        <input type="file" id="file" name="profileImage" onChange={handleChange} /> {/* Changed 'file' to 'profileImage' */}
-        <select
-          name="role"
-          id="role"
-          value={formdata.role}
-          onChange={handleChange}
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-        <button type="submit">Update</button>
-      </form>
-      {error && <p>{error.message}</p>}
-    </>
+    <div className="flex flex-col bg-gray-900 items-center justify-center min-h-screen bg-gray-50">
+      <Navbar/>
+      <div className="max-w-md w-full mx-auto p-8 bg-white rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-center mb-8">Update Profile</h2>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Username"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              type="email"
+              placeholder="Email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              type="password"
+              placeholder="Old Password"
+              id="oldpassword"
+              name="oldpassword"
+              value={formData.oldpassword}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              type="password"
+              placeholder="New Password"
+              id="newpassword"
+              name="newpassword"
+              value={formData.newpassword}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+            />
+          </div>
+          <div className="mb-4">
+            <input
+              type="file"
+              id="file"
+              name="profileImage"
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+            />
+          </div>
+          <div className="mb-4">
+            <select
+              name="role"
+              id="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div className="text-center">
+            <button
+              type="submit"
+              className="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600"
+            >
+              Update
+            </button>
+          </div>
+        </form>
+        {error && <p className="text-red-500 mt-4">{error.message}</p>}
+      </div>
+    </div>
   );
-}};
+};
 
 export default Update;
-
-

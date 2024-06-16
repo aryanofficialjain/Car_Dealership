@@ -60,7 +60,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center">
       <Navbar/>
       <div className="bg-gray-300 mt-4 text-black p-8 rounded-lg shadow-lg w-full sm:w-96">
         <h2 className="text-3xl font-semibold mb-4 text-center">Signup</h2>
