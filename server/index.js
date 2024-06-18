@@ -6,7 +6,8 @@ const PORT = process.env.PORT || 3000;
 const userRoutes = require("./routes/userRoutes.js");
 const cookieParser = require("cookie-parser");
 const path = require("path")
-
+const carAdminRoutes = require("./routes/carAdminRoutes.js");
+const authToken = require("./middleware/authToken.js")
 
 const app = express();
 app.use(express.static(path.resolve("./public")));
@@ -21,5 +22,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/user", userRoutes);
+app.use("/admin", carAdminRoutes);
+
 
 app.listen(PORT, () => console.log("Server is running on port", PORT));

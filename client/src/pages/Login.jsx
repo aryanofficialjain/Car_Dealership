@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar"; // Assuming you have a Navbar component
 import { Context } from "../context/Context";
 
@@ -72,6 +72,8 @@ const Login = () => {
               />
             </div>
             <div className="text-center">
+              <p> Don't have Account <a href="/signup" className="text-blue-800">Create Account</a> </p>
+              <br />
               <button
                 type="submit"
                 className="bg-purple-900 hover:bg-purple-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
