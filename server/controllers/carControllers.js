@@ -1,120 +1,47 @@
+// controllers/carControllers.js
 const Car = require("../models/Car.js");
 
-const AllCars = async (req, res) => {
-  const { token } = req.headers.authorization;
-
-  try {
-    if (!token) {
-      return res.status(403).json({ message: "Unauthorized" });
-    }
-
-    const cars = await Car.find();
-    res.status(200).json(cars);
-  } catch (error) {
-    console.error("Error fetching cars:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
-
 const AddCar = async (req, res) => {
-  const { token } = req.headers.authorization;
-  const { engine, type, brand, year, color, price, mileage, description } = req.body;
+  console.log(req.body);
+  try {
+    const { brand, type, description } = req.body;
 
-  if (token) {
-    try {
-      const images = req.files.map((file) => file.filename);
-      const car = await Car.create({
-        engine,
-        type,
-        brand,
-        year,
-        color,
-        price,
-        mileage,
-        description,
-        images, 
-      });
+    const car = await Car.create({
+      brand,
+      type,
+      description,
+      carImage: req.file.filename, // Assuming this is the filename of the uploaded image
+    });
 
-      if (!car) {
-        return res.status(404).json({ message: "Failed to add car" });
-      }
-
-      return res.status(200).json({ message: "Car added successfully", car });
-    } catch (error) {
-      console.error("Error adding car:", error);
-      return res.status(500).json({ message: "Internal Server Error" });
+    if (!car) {
+      return res.status(404).json({ message: "Unable to add car" });
     }
-  } else {
-    return res.status(403).json({ message: "Unauthorized" });
+
+    return res.status(200).json({ message: "Car added successfully", car });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ message: "Error while adding the car" });
   }
 };
 
 
-const EditCar = async (req, res) => {
-  const { token } = req.headers.authorization;
-  const { id } = req.params;
-  const { engine, type, brand, year, color, price, mileage, description } = req.body;
-
-  const role = token.role;
-
+const AllCar = async (req, res) => {
   try {
-    if (token) {
-      return res.status(403).json({ message: "Unauthorized" });
+    const cars = await Car.find({});
+
+    if (!cars || cars.length === 0) {
+      return res.status(404).json({ message: "No cars found" });
     }
 
-    const updatedCar = await Car.findByIdAndUpdate(
-      id,
-      {
-        engine,
-        type,
-        brand,
-        year,
-        color,
-        price,
-        mileage,
-        description,
-      },
-      { new: true }
-    );
-
-    if (!updatedCar) {
-      return res.status(404).json({ message: "Car not found" });
-    }
-
-    return res.status(200).json({ message: "Car updated successfully", car: updatedCar });
+    return res.status(200).json(cars);
   } catch (error) {
-    console.error("Error editing car:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-};
-
-
-const DeleteCar = async (req, res) => {
-  const { token } = req.headers.authorization; // Corrected spelling of 'authorization'
-  const { id } = req.params; // Extract car ID from request parameters
-
-  try {
-    if (!token) {
-      return res.status(403).json({ message: "Unauthorized" });
-    }
-
-    const deletedCar = await Car.findByIdAndDelete(id);
-
-    if (!deletedCar) {
-      return res.status(404).json({ message: "Car not found" });
-    }
-
-    return res
-      .status(200)
-      .json({ message: "Car deleted successfully", car: deletedCar });
-  } catch (error) {
-    console.error("Error deleting car:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error(error);
+    return res.status(500).json({ message: "Error while fetching cars" });
   }
 };
 
 const CarDetails = async (req, res) => {
-  const { id } = req.params; 
+  const id = req.params.id;
 
   try {
     const car = await Car.findById(id);
@@ -125,9 +52,11 @@ const CarDetails = async (req, res) => {
 
     return res.status(200).json(car);
   } catch (error) {
-    console.error("Error fetching car details:", error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.error(error);
+    return res.status(500).json({ message: "Error while fetching car details" });
   }
 };
 
-module.exports = { AllCars, AddCar, EditCar, DeleteCar, CarDetails };
+
+
+module.exports = { AddCar, AllCar , CarDetails};

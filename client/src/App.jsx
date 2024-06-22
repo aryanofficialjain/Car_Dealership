@@ -6,10 +6,9 @@ import Home from "./pages/Home";
 import Update from "./pages/Update";
 import Profile from "./pages/Profile";
 import AddCar from "./pages/AddCar";
-import AllCars from "./pages/AllCars";
-import EditCar from "./pages/EditCar";
 import { Context } from "./context/Context";
-import CarDetails from "./pages/CarDetails";
+import AllCar from "./pages/AllCar";
+import CarDetail from "./pages/CarDetail"
 
 const App = () => {
   const { token } = useContext(Context);
@@ -17,20 +16,23 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/allcars" element={<AllCars />} />
-      <Route path="/login" element={!token ? <Login /> : <Navigate to="/" />} />
-      <Route path="/signup" element={!token ? <Signup /> : <Navigate to="/" />} />
-      {token && (
+      {token ? (
         <>
           <Route path="/update" element={<Update />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/addcar" element={<AddCar />} />
-          <Route path="/allcars" element={<AllCars />} />
-          <Route path="/editcar" element={<EditCar />} />
-          <Route path="/car/:id" element={CarDetails} />
+          <Route path="/allcars" element={<AllCar/>} />
+          <Route path="/car/car/:id" element={<CarDetail/>} />
+        </>
+      ) : (
+        <>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/allcars" element={<AllCar/>} /> 
+          <Route path="/car/car/:id" element={<CarDetail/>} />
         </>
       )}
-      <Route path="*" element={<Navigate to="/login" />} />
+      <Route path="*" element={<Home/>}/>
     </Routes>
   );
 };

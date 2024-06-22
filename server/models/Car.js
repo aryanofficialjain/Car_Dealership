@@ -4,34 +4,15 @@ const carSchema = new Schema({
   brand: {
     type: String,
     required: true,
-  },
-  year: {
-    type: Number,
-    required: true,
-  },
-  engine: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-    required: true,
+    unique: true,
   },
   type: {
     type: String,
     enum: ["suv", "supercar", "sedan"],
     default: "sedan",
   },
-  price: {
-    type: Number,
-    required: true,
-  },
-  mileage: {
-    type: Number,
-    required: true,
-  },
-  carImages: {
-    type: [String], 
+  carImage: {
+    type: String,
   },
   description: {
     type: String,

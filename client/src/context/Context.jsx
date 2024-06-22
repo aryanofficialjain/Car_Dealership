@@ -4,6 +4,7 @@ export const Context = createContext(null);
 
 export const ContextProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+  console.log(token);
 
   // Retrieve token from local storage on component mount
   useEffect(() => {
