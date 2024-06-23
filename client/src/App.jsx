@@ -9,6 +9,7 @@ import AddCar from "./pages/AddCar";
 import { Context } from "./context/Context";
 import AllCar from "./pages/AllCar";
 import CarDetail from "./pages/CarDetail"
+import Cart from "./pages/Cart"
 
 const App = () => {
   const { token } = useContext(Context);
@@ -23,16 +24,16 @@ const App = () => {
           <Route path="/addcar" element={<AddCar />} />
           <Route path="/allcars" element={<AllCar/>} />
           <Route path="/car/car/:id" element={<CarDetail/>} />
+          <Route path="/cart" element={<Cart/>} />
         </>
       ) : (
         <>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/allcars" element={<AllCar/>} /> 
-          <Route path="/car/car/:id" element={<CarDetail/>} />
         </>
       )}
-      <Route path="*" element={<Home/>}/>
+      <Route path="*" element={<Login/>}/>
     </Routes>
   );
 };

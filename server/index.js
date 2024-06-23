@@ -7,7 +7,7 @@ const userRoutes = require("./routes/userRoutes.js");
 const cookieParser = require("cookie-parser");
 const path = require("path")
 const carRoutes = require("./routes/carRoutes.js")
-
+const cartRoutes = require("./routes/cartRoutes.js")
 
 
 
@@ -25,6 +25,7 @@ app.use(cookieParser());
 // Routes
 app.use("/user", userRoutes);
 app.use("/car", carRoutes);
+app.use("/cart", cartRoutes);
 
 
 

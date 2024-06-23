@@ -17,6 +17,10 @@ const carSchema = new Schema({
   description: {
     type: String,
   },
+  addedBy: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  }
 });
 
 const Car = model("Car", carSchema);

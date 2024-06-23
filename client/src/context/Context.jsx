@@ -4,9 +4,11 @@ export const Context = createContext(null);
 
 export const ContextProvider = ({ children }) => {
   const [token, setToken] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
+
   console.log(token);
 
-  // Retrieve token from local storage on component mount
+  
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
@@ -14,7 +16,25 @@ export const ContextProvider = ({ children }) => {
     }
   }, []);
 
-  // Store token in local storage when it changes
+  // useEffect(() => {
+  //   const fetchCartItems = async () = {
+  //   };
+
+  //   fetchCartItems();
+  // }, []);
+
+
+  const addToCart = async (cardata) => {
+    console.log(cardata);
+
+  };
+
+
+  const removeFromCart = async (carId) => {
+  };
+
+
+
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
@@ -24,7 +44,7 @@ export const ContextProvider = ({ children }) => {
   }, [token]);
 
   return (
-    <Context.Provider value={{ token, setToken }}>
+    <Context.Provider value={{ token, setToken, cartItems, setCartItems, addToCart, removeFromCart }}>
       {children}
     </Context.Provider>
   );
