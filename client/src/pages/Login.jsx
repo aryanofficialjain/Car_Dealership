@@ -8,17 +8,17 @@ const Login = () => {
   const [error, setError] = useState(null);
   const { setToken } = useContext(Context); // Assuming you have a Context for managing state
   const navigate = useNavigate();
-  const [formdata, setformdata] = useState({ email: "", password: "" });
+  const [formdata, setFormdata] = useState({ email: "", password: "" });
 
-  const handlechange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setformdata((prev) => ({
+    setFormdata((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handlesubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -30,7 +30,7 @@ const Login = () => {
         navigate("/profile");
       }
     } catch (error) {
-      setError(error);
+      setError("Login failed. Please check your credentials.");
     }
   };
 
@@ -38,9 +38,9 @@ const Login = () => {
     <div className="min-h-screen bg-gray-900 flex flex-col">
       <Navbar />
       <div className="flex-1 flex items-center justify-center">
-        <div className="bg-gray-300 mt-8 p-8 rounded-lg shadow-lg w-full sm:w-96">
+        <div className="bg-black text-white mt-8 p-8 rounded-lg shadow-lg w-full sm:w-96">
           <h2 className="text-3xl font-semibold mb-4 text-center">Login</h2>
-          <form onSubmit={handlesubmit}>
+          <form onSubmit={handleSubmit}>
             <div className="mb-6">
               <label htmlFor="email" className="block text-sm font-medium">
                 Email address
@@ -50,8 +50,8 @@ const Login = () => {
                 id="email"
                 name="email"
                 value={formdata.email}
-                onChange={handlechange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 bg-black py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Enter your email address"
                 required
               />
@@ -65,14 +65,19 @@ const Login = () => {
                 id="password"
                 name="password"
                 value={formdata.password}
-                onChange={handlechange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Enter your password"
                 required
               />
             </div>
             <div className="text-center">
-              <p> Don't have Account <a href="/signup" className="text-blue-800">Create Account</a> </p>
+              <p>
+                Don't have an account?{" "}
+                <Link to="/signup" className="text-blue-800">
+                  Create Account
+                </Link>
+              </p>
               <br />
               <button
                 type="submit"
@@ -82,7 +87,9 @@ const Login = () => {
               </button>
             </div>
           </form>
-          {error && <p className="text-red-500 text-sm mt-2">Login Failed</p>}
+          {error && (
+            <p className="text-red-500 text-sm mt-2">{error}</p>
+          )}
         </div>
       </div>
     </div>

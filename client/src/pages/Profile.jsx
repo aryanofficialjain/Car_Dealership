@@ -22,7 +22,7 @@ const Profile = () => {
         setUser(response.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching user profile:", error);
       setError(error);
     }
   };
@@ -46,7 +46,7 @@ const Profile = () => {
         handleLogout(); // Log out user after deleting the account
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error deleting account:", error);
       setError(error);
     }
   };
@@ -65,10 +65,10 @@ const Profile = () => {
 
   return (
     <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center">
-      <Navbar/>
+      <Navbar />
       <div className="container mx-auto p-4">
         {user && (
-          <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
+          <div className="max-w-md mx-auto bg-black text-white rounded-lg overflow-hidden shadow-lg">
             <div className="p-4">
               <div className="flex items-center justify-center">
                 <img
@@ -84,19 +84,19 @@ const Profile = () => {
               <div className="flex justify-center mt-4 space-x-4">
                 <button
                   onClick={handleLogout}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none"
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   Logout
                 </button>
                 <button
                   onClick={handleUpdate}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   Update
                 </button>
                 <button
                   onClick={removeAccount}
-                  className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg focus:outline-none"
+                  className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   Delete Account
                 </button>

@@ -23,6 +23,11 @@ const Navbar = () => {
                 Profile
               </Link>
             </li>
+            <li>
+              <a href="/cart" className="text-white hover:text-gray-300">
+                Cart
+              </a>
+            </li>
             </>
           ) : (
             <>

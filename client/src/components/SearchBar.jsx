@@ -18,7 +18,7 @@ const SearchBar = () => {
           placeholder="Search Your Dream Car"
           className="py-2 px-4 w-64 sm:w-80 rounded-l-md focus:outline-none"
         />
-        <button className="bg-gray-900 hover:bg-purple-700 text-white py-2 px-4 rounded-r-md" onClick={handlesearch}>
+        <button className="bg-purple-900 hover:bg-purple-700 text-white py-2 px-4 rounded-r-md" onClick={handlesearch}>
           Search
         </button>
       </div>

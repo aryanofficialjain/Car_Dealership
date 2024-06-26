@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import axios from "axios"
 
 export const Context = createContext(null);
 
@@ -16,23 +17,6 @@ export const ContextProvider = ({ children }) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   const fetchCartItems = async () = {
-  //   };
-
-  //   fetchCartItems();
-  // }, []);
-
-
-  const addToCart = async (cardata) => {
-    console.log(cardata);
-
-  };
-
-
-  const removeFromCart = async (carId) => {
-  };
-
 
 
   useEffect(() => {
@@ -44,7 +28,7 @@ export const ContextProvider = ({ children }) => {
   }, [token]);
 
   return (
-    <Context.Provider value={{ token, setToken, cartItems, setCartItems, addToCart, removeFromCart }}>
+    <Context.Provider value={{ token, setToken, cartItems, setCartItems }}>
       {children}
     </Context.Provider>
   );
