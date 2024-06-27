@@ -1,13 +1,31 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../context/Context";
 
-const CarForm = () => {
+const UpdateCar = () => {
+  const { id } = useParams(); // Extract id from URL
+  const { token } = useContext(Context);
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("sedan");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const { token } = useContext(Context);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCarDetails = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8000/car/car/${id}`);
+        const car = res.data;
+        setBrand(car.brand);
+        setType(car.type);
+        setDescription(car.description);
+      } catch (error) {
+        console.error("Error fetching car details:", error);
+      }
+    };
+    fetchCarDetails();
+  }, [id]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -17,10 +35,12 @@ const CarForm = () => {
       formData.append("brand", brand);
       formData.append("type", type);
       formData.append("description", description);
-      formData.append("carImage", image);
+      if (image) {
+        formData.append("carImage", image);
+      }
 
-      const res = await axios.post(
-        "http://localhost:8000/car/addcar",
+      const res = await axios.put(
+        `http://localhost:8000/car/car/${id}`,
         formData,
         {
           headers: {
@@ -31,13 +51,13 @@ const CarForm = () => {
       );
 
       console.log(res.data);
-      setBrand("");
-      setType("sedan");
-      setDescription("");
-      setImage(null);
+      if (res.status === 200) {
+        navigate("/carlist");
+      }
+      // Optionally handle success feedback or redirect
     } catch (error) {
-      console.error("Error adding car:", error);
-      alert("Error adding car. Please try again.");
+      console.error("Error updating car:", error);
+      alert("Error updating car. Please try again.");
     }
   };
 
@@ -48,7 +68,7 @@ const CarForm = () => {
   return (
     <div className="bg-gray-900 min-h-screen text-white">
       <div className="container mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-4">Add a New Car</h2>
+        <h2 className="text-2xl font-bold mb-4">Update Car Details</h2>
         <form onSubmit={handleFormSubmit} encType="multipart/form-data">
           <div className="mb-4">
             <label className="block text-sm font-medium">Brand:</label>
@@ -87,14 +107,13 @@ const CarForm = () => {
               onChange={handleFileChange}
               accept="image/*"
               className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
-              required
             />
           </div>
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Add Car
+            Update Car
           </button>
         </form>
       </div>
@@ -102,4 +121,4 @@ const CarForm = () => {
   );
 };
 
-export default CarForm;
+export default UpdateCar;
