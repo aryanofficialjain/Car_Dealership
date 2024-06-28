@@ -20,7 +20,10 @@ const carSchema = new Schema({
   addedBy: {
     type: Schema.Types.ObjectId,
     ref: "User",
-  }
+  },
+  price: {
+    type: Number,
+  },  
 });
 
 const Car = model("Car", carSchema);

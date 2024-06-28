@@ -24,6 +24,11 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
+              <Link to="/carlist" className="text-white hover:text-gray-300">
+                CarList
+               </Link>
+            </li>
+            <li>
               <a href="/cart" className="text-white hover:text-gray-300">
                 Cart
               </a>
@@ -41,6 +46,7 @@ const Navbar = () => {
                   Login
                 </Link>
               </li>
+              
             </>
           )}
         </ul>

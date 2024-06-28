@@ -9,6 +9,7 @@ const CarDetail = () => {
   const { id } = useParams();
   const { token, cartItems, setCartItems } = useContext(Context);
   const [isInCart, setIsInCart] = useState(false);
+  const [error, seterror] = useState(null);
 
   useEffect(() => {
     const fetchCarDetail = async () => {
@@ -20,6 +21,7 @@ const CarDetail = () => {
         setIsInCart(foundInCart);
       } catch (error) {
         console.error("Error fetching car details:", error);
+        seterror(error.message);
       }
     };
 
@@ -95,6 +97,7 @@ const CarDetail = () => {
             )}
           </div>
         </div>
+        
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context";
+import Navbar from "../components/Navbar";
 
 const CarForm = () => {
   const [brand, setBrand] = useState("");
@@ -47,6 +48,7 @@ const CarForm = () => {
 
   return (
     <div className="bg-gray-900 min-h-screen text-white">
+      <Navbar/>
       <div className="container mx-auto p-4">
         <h2 className="text-2xl font-bold mb-4">Add a New Car</h2>
         <form onSubmit={handleFormSubmit} encType="multipart/form-data">

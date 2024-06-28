@@ -8,7 +8,6 @@ export const ContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   console.log(token);
-
   
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
