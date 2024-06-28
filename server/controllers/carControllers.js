@@ -1,18 +1,34 @@
 const Car = require("../models/Car.js");
+const jwt = require("jsonwebtoken");
 
 const AddCar = async (req, res) => {
-  // Ensure that required fields are present in req.body
-  const { brand, type, description } = req.body;
-  if (!brand || !type || !description) {
+  const { brand, type, description, price } = req.body;
+  if (!brand || !type || !description || !price) {
     return res.status(400).json({ message: "Brand, type, and description are required" });
   }
 
-  try {
+  const token = req.headers.authorization;
 
+  if (!token || !token.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized: Missing or invalid token" });
+  }
+
+  const authToken = token.split(" ")[1];
+
+  const verifyToken = jwt.verify(authToken, process.env.SECRET_KEY);
+
+  const {role} = verifyToken;
+
+  if(role !== "admin"){
+    return res.status(404).json("Your are an Admin");
+  }
+
+  try {
     const car = await Car.create({
       brand,
       type,
       description,
+      price,
       carImage: req.file ? req.file.filename : null, // Handle if no file is uploaded
     });
 
@@ -21,7 +37,7 @@ const AddCar = async (req, res) => {
     }
 
     return res.status(201).json({ message: "Car added successfully", car });
-    // Use 201 status for successful creation (according to RESTful conventions)
+
   } catch (error) {
     console.error("Error adding car:", error.message);
     if (error.name === 'ValidationError') {
@@ -68,13 +84,30 @@ const CarDetails = async (req, res) => {
 
 const UpdateCar = async (req, res) => {
   const { id } = req.params;
-  const { brand, type, description } = req.body;
+  const { brand, type, description, price } = req.body;
+
+  const token = req.headers.authorization;
+
+  if (!token || !token.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized: Missing or invalid token" });
+  }
+
+  const authToken = token.split(" ")[1];
+
+  const verifyToken = jwt.verify(authToken, process.env.SECRET_KEY);
+
+  const {role} = verifyToken;
+
+  if(role !== "admin"){
+    return res.status(404).json("Your are an Admin");
+  }
 
   try {
     const updatedCar = await Car.findByIdAndUpdate(id, {
       brand,
       type,
       description,
+      price,
     }, { new: true });
 
     if (!updatedCar) {
@@ -90,6 +123,22 @@ const UpdateCar = async (req, res) => {
 
 const DeleteCar = async (req, res) => {
   const { id } = req.params;
+
+  const token = req.headers.authorization;
+
+  if (!token || !token.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized: Missing or invalid token" });
+  }
+
+  const authToken = token.split(" ")[1];
+
+  const verifyToken = jwt.verify(authToken, process.env.SECRET_KEY);
+
+  const {role} = verifyToken;
+
+  if(role !== "admin"){
+    return res.status(404).json("Your are an Admin");
+  }
 
   try {
     const deletedCar = await Car.findByIdAndDelete(id);

@@ -1,22 +1,20 @@
 import { createContext, useState, useEffect } from "react";
-import axios from "axios"
 
 export const Context = createContext(null);
 
 export const ContextProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [cartItems, setCartItems] = useState([]);
+  const [isAdmin, setisAdmin] = useState(null);
 
   console.log(token);
-  
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
     }
   }, []);
-
-
 
   useEffect(() => {
     if (token) {
@@ -27,7 +25,9 @@ export const ContextProvider = ({ children }) => {
   }, [token]);
 
   return (
-    <Context.Provider value={{ token, setToken, cartItems, setCartItems }}>
+    <Context.Provider
+      value={{ token, setToken, cartItems, setCartItems, isAdmin, setisAdmin }}
+    >
       {children}
     </Context.Provider>
   );

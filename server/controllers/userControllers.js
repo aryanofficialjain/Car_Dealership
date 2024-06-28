@@ -17,6 +17,12 @@ const signupUser = async (req, res) => {
     return res.status(400).json("Fill all input Fields");
   }
 
+  const admin = false;
+
+  if(role === "admin"){
+    admin = true;
+  }
+
   const hashedpassword = await bcrypt.hash(password, 10);
 
   try {
@@ -28,7 +34,7 @@ const signupUser = async (req, res) => {
       profileImage,
     });
 
-    res.status(200).json({ message: "User Created Successfully", user });
+    res.status(200).json({ message: "User Created Successfully", user, admin });
   } catch (error) {
     console.log("Error while creating User", error);
     res.status(500).json("Error while creating a User");
@@ -56,6 +62,12 @@ const loginUser = async (req, res) => {
       return res.status(404).json("Password is incorrect");
     }
 
+    const admin = false;
+
+    if(user.role === "admin"){
+      admin = true;
+    }
+
     const token = jwt.sign(
       {
         username: user.username,
@@ -73,7 +85,7 @@ const loginUser = async (req, res) => {
         // Add other cookie options as needed for security
       })
       .status(200)
-      .json({ message: "You are logged in Successfully", token });
+      .json({ message: "You are logged in Successfully", token, admin });
   } catch (error) {
     console.log("Error while logging in", error);
     res.status(500).json({ message: "Error while logging IN" });
@@ -119,6 +131,12 @@ const updateUser = async (req, res) => {
       }
     }
 
+    const admin = false;
+
+    if(role === "admin"){
+      admin = true;
+    }
+
     const updateData = {
       username,
       email,
@@ -143,7 +161,7 @@ const updateUser = async (req, res) => {
       return res.status(404).json("User not found");
     }
 
-    return res.status(200).json({ message: "User update succesfuly", newuser });
+    return res.status(200).json({ message: "User update succesfuly", newuser, admin });
   } catch (error) {
     console.log("Error while updating the user", error);
     res.status(500).json("An error occurred while updating the user");
@@ -194,15 +212,20 @@ const profileUser = async (req, res) => {
 
   try {
     const verifyToken = jwt.verify(authToken, process.env.SECRET_KEY);
-    const { id } = verifyToken;
+    const { id, role } = verifyToken;
+
+    const admin = false;
+
+    if(role === "admin"){
+      admin = true;
+    }
 
     const user = await User.findById(id);
-
     if (!user) {
       return res.status(404).json({ message: "Error while finding  User" });
     }
 
-    res.status(200).json(user);
+    res.status(200).json({user, admin});
   } catch (error) {
     console.log("Error while fetching profile", error);
     res.status(500).json("Error while fetching the User Profile");

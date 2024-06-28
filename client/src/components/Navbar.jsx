@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Context } from "../context/Context";
 
 const Navbar = () => {
-  const { token } = useContext(Context);
+  const { token, isAdmin } = useContext(Context);
 
   return (
     <nav className="bg-gray-900 p-4 flex justify-center items-center relative">
@@ -17,24 +17,43 @@ const Navbar = () => {
             </Link>
           </li>
           {token ? (
+            // Render when user is authenticated (token present)
             <>
-            <li>
-              <Link to="/profile" className="text-white hover:text-gray-300">
-                Profile
-              </Link>
-            </li>
-            <li>
-              <Link to="/carlist" className="text-white hover:text-gray-300">
-                CarList
-               </Link>
-            </li>
-            <li>
-              <a href="/cart" className="text-white hover:text-gray-300">
-                Cart
-              </a>
-            </li>
+              {/* Basic links */}
+              <li>
+                <Link to="/profile" className="text-white hover:text-gray-300">
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <Link to="/cart" className="text-white hover:text-gray-300">
+                  Cart
+                </Link>
+              </li>
+              {/* Admin-specific links */}
+              {isAdmin && (
+                <>
+                  <li>
+                    <Link
+                      to="/carlist"
+                      className="text-white hover:text-gray-300"
+                    >
+                      CarList
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/dashboard"
+                      className="text-white hover:text-gray-300"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                </>
+              )}
             </>
           ) : (
+            // Render when user is not authenticated (token not present)
             <>
               <li>
                 <Link to="/signup" className="text-white hover:text-gray-300">
@@ -46,7 +65,6 @@ const Navbar = () => {
                   Login
                 </Link>
               </li>
-              
             </>
           )}
         </ul>

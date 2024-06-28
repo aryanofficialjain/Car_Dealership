@@ -6,7 +6,7 @@ import { Context } from "../context/Context";
 
 const Login = () => {
   const [error, setError] = useState(null);
-  const { setToken } = useContext(Context); // Assuming you have a Context for managing state
+  const { setToken, setisAdmin } = useContext(Context); // Assuming you have a Context for managing state
   const navigate = useNavigate();
   const [formdata, setFormdata] = useState({ email: "", password: "" });
 
@@ -27,6 +27,7 @@ const Login = () => {
       );
       if (response.status === 200) {
         setToken(response.data.token);
+        setisAdmin(response.data.admin);
         navigate("/profile");
       }
     } catch (error) {

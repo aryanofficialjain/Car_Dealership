@@ -17,8 +17,12 @@ const AddItem = async (req, res) => {
     if (!verifyToken) {
       return res.status(401).json({ error: "Unauthorized: Token is not verified" });
     }
-    
-    const { id } = verifyToken;
+
+    const { id, role } = verifyToken;
+
+    if(role !== "user"){
+      return res.status(404).json("Your are admin not able to get cart items");
+    }
 
     const car = await Car.findById(carid);
     if (!car) {
@@ -71,7 +75,11 @@ const GetItem = async (req, res) => {
       return res.status(401).json({ error: "Token is not verified" });
     }
     
-    const { id } = verifyToken;
+    const { id, role } = verifyToken;
+
+    if(role !== "user"){
+      return res.status(404).json("Your are admin not able to get cart items");
+    }
 
     // Fetch user and populate 'cart' field
     const user = await User.findById(id).populate('cart');
@@ -104,8 +112,11 @@ const DeleteItem = async (req, res) => {
     if (!verifyToken) {
       return res.status(401).json({ error: "Token is not verified" });
     }
-    const { id } = verifyToken;
+    const { id, role } = verifyToken;
 
+    if(role !== "user"){
+      return res.status(404).json("Your are admin not able to get cart items");
+    }
 
     const user = await User.findById(id);
     if (!user) {
