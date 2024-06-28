@@ -22,7 +22,7 @@ const SearchBar = ({ handleSearch }) => {
   };
 
   return (
-    <div className="flex justify-center items-center mt-8">
+    <div className="flex justify-center items-center mt-8 text-black">
       <div className="relative flex items-center">
         <input
           type="text"
