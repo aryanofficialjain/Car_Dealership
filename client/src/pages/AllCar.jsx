@@ -17,7 +17,7 @@ const AllCar = () => {
       try {
         const response = await axios.get("http://localhost:8000/car/allcars");
         setCars(response.data);
-        setFilteredCars(response.data); // Initially set to all cars
+        setFilteredCars(response.data);
       } catch (error) {
         console.error("Error fetching cars:", error);
         setError(error.message);

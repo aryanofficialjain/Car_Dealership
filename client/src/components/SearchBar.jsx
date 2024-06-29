@@ -1,5 +1,3 @@
-// SearchBar.js
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,25 +19,31 @@ const SearchBar = ({ handleSearch }) => {
     handleSearch(filters);
   };
 
+  const handlePriceRangeChange = (e) => {
+    const selectedRange = e.target.value;
+    if (selectedRange === "any") {
+      setFilters({ ...filters, priceFrom: "", priceTo: "" });
+    } else {
+      const [from, to] = selectedRange.split("-");
+      setFilters({ ...filters, priceFrom: from, priceTo: to });
+    }
+  };
+
   return (
     <div className="flex justify-center items-center mt-8 text-black">
       <div className="relative flex items-center">
-        <input
-          type="text"
-          name="priceFrom"
-          placeholder="Price from"
-          value={filters.priceFrom}
-          onChange={handleChange}
-          className="py-2 px-4 w-32 sm:w-40 rounded-l-md focus:outline-none"
-        />
-        <input
-          type="text"
-          name="priceTo"
-          placeholder="Price to"
-          value={filters.priceTo}
-          onChange={handleChange}
-          className="py-2 px-4 w-32 sm:w-40 rounded-r-md focus:outline-none"
-        />
+        <select
+          name="priceRange"
+          value={`${filters.priceFrom}-${filters.priceTo}`}
+          onChange={handlePriceRangeChange}
+          className="py-2 px-4 w-64 rounded-md focus:outline-none"
+        >
+          <option value="any">Any Price</option>
+          <option value="0-500000">0 - 5 lakhs</option>
+          <option value="500001-1000000">5 - 10 lakhs</option>
+          <option value="1000001-1500000">10 - 15 lakhs</option>
+          {/* Add more options as needed */}
+        </select>
       </div>
       <input
         type="text"

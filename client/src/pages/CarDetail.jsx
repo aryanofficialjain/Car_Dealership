@@ -7,9 +7,9 @@ import Navbar from "../components/Navbar";
 const CarDetail = () => {
   const [car, setCar] = useState(null);
   const { id } = useParams();
-  const { token, cartItems, setCartItems } = useContext(Context);
+  const { isAdmin, token, cartItems, setCartItems } = useContext(Context);
   const [isInCart, setIsInCart] = useState(false);
-  const [error, seterror] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCarDetail = async () => {
@@ -21,7 +21,7 @@ const CarDetail = () => {
         setIsInCart(foundInCart);
       } catch (error) {
         console.error("Error fetching car details:", error);
-        seterror(error.message);
+        setError(error.message);
       }
     };
 
@@ -80,24 +80,25 @@ const CarDetail = () => {
             <p className="text-xl font-semibold mb-2">{car.brand}</p>
             <p className="text-gray-300 mb-2">{car.type}</p>
             <p className="text-gray-400 mb-4">{car.description}</p>
-            {isInCart ? (
-              <button
-                onClick={() => handleRemoveFromCart(car._id)}
-                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                Remove from Cart
-              </button>
-            ) : (
-              <button
-                onClick={() => handleAddToCart(car._id)}
-                className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                Add to Cart
-              </button>
+            {isAdmin ? null : (
+              isInCart ? (
+                <button
+                  onClick={() => handleRemoveFromCart(car._id)}
+                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  Remove from Cart
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleAddToCart(car._id)}
+                  className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  Add to Cart
+                </button>
+              )
             )}
           </div>
         </div>
-        
       </div>
     </div>
   );
