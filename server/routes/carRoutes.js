@@ -20,7 +20,7 @@ const upload = multer({ storage: storage });
 router.post("/addcar",upload.single("carImage"), carControllers.AddCar);
 router.get("/allcars", carControllers.AllCar);
 router.get("/car/:id", carControllers.CarDetails);
-router.put("/car/:id", carControllers.UpdateCar);
+router.put("/car/:id",upload.single("carImage"), carControllers.UpdateCar);
 router.delete("/car/:id", carControllers.DeleteCar);
 
 

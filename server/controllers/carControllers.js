@@ -108,6 +108,7 @@ const UpdateCar = async (req, res) => {
       type,
       description,
       price,
+      carImage: req.file ? req.file.filename : null,
     }, { new: true });
 
     if (!updatedCar) {
@@ -123,22 +124,6 @@ const UpdateCar = async (req, res) => {
 
 const DeleteCar = async (req, res) => {
   const { id } = req.params;
-
-  const token = req.headers.authorization;
-
-  if (!token || !token.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Unauthorized: Missing or invalid token" });
-  }
-
-  const authToken = token.split(" ")[1];
-
-  const verifyToken = jwt.verify(authToken, process.env.SECRET_KEY);
-
-  const {role} = verifyToken;
-
-  if(role !== "admin"){
-    return res.status(404).json("Your are an Admin");
-  }
 
   try {
     const deletedCar = await Car.findByIdAndDelete(id);

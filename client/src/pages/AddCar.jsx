@@ -8,6 +8,7 @@ const CarForm = () => {
   const [type, setType] = useState("sedan");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
+  const [price, setPrice] = useState(""); // Added state for price
   const { token } = useContext(Context);
 
   const handleFormSubmit = async (e) => {
@@ -19,6 +20,7 @@ const CarForm = () => {
       formData.append("type", type);
       formData.append("description", description);
       formData.append("carImage", image);
+      formData.append("price", price); // Append price to form data
 
       const res = await axios.post(
         "http://localhost:8000/car/addcar",
@@ -36,6 +38,7 @@ const CarForm = () => {
       setType("sedan");
       setDescription("");
       setImage(null);
+      setPrice(""); // Clear price input after submission
     } catch (error) {
       console.error("Error adding car:", error);
       alert("Error adding car. Please try again.");
@@ -48,7 +51,7 @@ const CarForm = () => {
 
   return (
     <div className="bg-gray-900 min-h-screen text-white">
-      <Navbar/>
+      <Navbar />
       <div className="container mx-auto p-4">
         <h2 className="text-2xl font-bold mb-4">Add a New Car</h2>
         <form onSubmit={handleFormSubmit} encType="multipart/form-data">
@@ -80,6 +83,16 @@ const CarForm = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium">Price:</label>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
+              required
             />
           </div>
           <div className="mb-4">

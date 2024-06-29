@@ -52,7 +52,11 @@ const UpdateCar = () => {
 
       console.log(res.data);
       if (res.status === 200) {
-        navigate("/carlist");
+        const updatedCar = res.data.car; // Assuming res.data has updated car details
+        setBrand(updatedCar.brand);
+        setType(updatedCar.type);
+        setDescription(updatedCar.description);
+        navigate("/carlist"); // Navigate after updating state
       }
       // Optionally handle success feedback or redirect
     } catch (error) {

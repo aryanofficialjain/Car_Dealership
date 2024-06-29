@@ -25,11 +25,14 @@ const Navbar = () => {
                   Profile
                 </Link>
               </li>
-              <li>
-                <Link to="/cart" className="text-white hover:text-gray-300">
-                  Cart
-                </Link>
-              </li>
+              {/* Render "Cart" link only if user is not admin */}
+              {!isAdmin && (
+                <li>
+                  <Link to="/cart" className="text-white hover:text-gray-300">
+                    Cart
+                  </Link>
+                </li>
+              )}
               {/* Admin-specific links */}
               {isAdmin && (
                 <>

@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 const CarList = () => {
   const [cars, setCars] = useState([]);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchCars = async () => {
