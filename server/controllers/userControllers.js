@@ -17,7 +17,7 @@ const signupUser = async (req, res) => {
     return res.status(400).json("Fill all input Fields");
   }
 
-  const admin = false;
+  let admin = false;
 
   if(role === "admin"){
     admin = true;
@@ -62,7 +62,7 @@ const loginUser = async (req, res) => {
       return res.status(404).json("Password is incorrect");
     }
 
-    const admin = false;
+    let admin = false;
 
     if(user.role === "admin"){
       admin = true;
@@ -131,7 +131,7 @@ const updateUser = async (req, res) => {
       }
     }
 
-    const admin = false;
+    let admin = false;
 
     if(role === "admin"){
       admin = true;
@@ -203,6 +203,7 @@ const deleteUser = async (req, res) => {
 const profileUser = async (req, res) => {
   const token = req.headers.authorization;
   console.log(req.body);
+  console.log(req.headers.authorization)
 
   if (!token) {
     return res.status(401).json("Unauthorized");
@@ -214,7 +215,7 @@ const profileUser = async (req, res) => {
     const verifyToken = jwt.verify(authToken, process.env.SECRET_KEY);
     const { id, role } = verifyToken;
 
-    const admin = false;
+    let admin = false;
 
     if(role === "admin"){
       admin = true;

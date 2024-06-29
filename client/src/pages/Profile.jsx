@@ -18,12 +18,10 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (response.status === 200) {
-        setUser(response.data);
-      }
+      setUser(response.data.user); // Assuming response.data.user contains user data
     } catch (error) {
       console.error("Error fetching user profile:", error);
-      setError(error);
+      setError(error.response.data.message || error.message);
     }
   };
 
@@ -41,13 +39,11 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (response.status === 200) {
-        setUser(null); // Clear user data after account deletion
-        handleLogout(); // Log out user after deleting the account
-      }
+      setUser(null); // Clear user data after account deletion
+      handleLogout(); // Log out user after deleting the account
     } catch (error) {
       console.error("Error deleting account:", error);
-      setError(error);
+      setError(error.response.data.message || error.message);
     }
   };
 
@@ -104,7 +100,7 @@ const Profile = () => {
             </div>
           </div>
         )}
-        {error && <p className="text-red-500 mt-4">{error.message}</p>}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
     </div>
   );

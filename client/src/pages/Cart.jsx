@@ -1,14 +1,15 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context";
 import Navbar from "../components/Navbar";
 
 const Cart = () => {
-  const { cartItems, setCartItems, token } = useContext(Context);
+  const { cartItems = [], setCartItems, token } = useContext(Context);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCartItems();
-  }, [cartItems]);
+    fetchCartItems().finally(() => setLoading(false));
+  }, []);
 
   const fetchCartItems = async () => {
     try {
@@ -20,21 +21,20 @@ const Cart = () => {
       setCartItems(response.data);
     } catch (error) {
       console.error("Error fetching cart items:", error);
+      setCartItems([]); // Set cartItems to an empty array on error
     }
   };
 
   const handleRemoveItem = async (id) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/cart/deleteitem`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          data: { itemId: id },
-        }
-      );
-      setCartItems(response.data);
+      await axios.delete(`http://localhost:8000/cart/deleteitem`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: { itemId: id },
+      });
+      // Refetch cart items after successful removal
+      fetchCartItems();
     } catch (error) {
       console.error("Error removing item from cart:", error);
     }
@@ -44,7 +44,9 @@ const Cart = () => {
     <div className="bg-gray-900 min-h-screen text-white">
       <Navbar />
       <div className="container mx-auto p-4">
-        {cartItems === null || cartItems === undefined || cartItems.length === 0 ? (
+        {loading ? (
+          <p>Loading...</p>
+        ) : cartItems.length === 0 ? (
           <p className="text-center">Your Cart is Empty</p>
         ) : (
           <>
