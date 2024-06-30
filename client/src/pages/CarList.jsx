@@ -55,6 +55,7 @@ const CarList = () => {
                 <th className="py-3 px-6 text-left">Brand</th>
                 <th className="py-3 px-6 text-left">Type</th>
                 <th className="py-3 px-6 text-left">Description</th>
+                <th className="py-3 px-6 text-left">Price</th>
                 <th className="py-3 px-6 text-left">Image</th>
                 <th className="py-3 px-6 text-left">Actions</th>
               </tr>
@@ -65,6 +66,7 @@ const CarList = () => {
                   <td className="py-3 px-6 text-left">{car.brand}</td>
                   <td className="py-3 px-6 text-left">{car.type}</td>
                   <td className="py-3 px-6 text-left">{car.description}</td>
+                  <td className="py-3 px-6 text-left">${car.price}</td>
                   <td className="py-3 px-6 text-left">
                     {car.carImage && (
                       <img
@@ -74,8 +76,8 @@ const CarList = () => {
                       />
                     )}
                   </td>
-                  <td className="py-3 px-6 text-left">
-                    <button onClick={() => handleUpdate(car._id)} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg mr-2 focus:outline-none focus:ring-2 focus:ring-green-500">Update</button>
+                  <td className="py-3 px-6 text-left space-x-2">
+                    <button onClick={() => handleUpdate(car._id)} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">Update</button>
                     <button onClick={() => handleDelete(car._id)} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">Delete</button>
                   </td>
                 </tr>

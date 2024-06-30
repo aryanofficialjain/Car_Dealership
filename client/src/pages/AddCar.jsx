@@ -2,8 +2,10 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const CarForm = () => {
+  const navigate = useNavigate();
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("sedan");
   const [description, setDescription] = useState("");
@@ -34,6 +36,9 @@ const CarForm = () => {
       );
 
       console.log(res.data);
+      if(res.status === 201){
+        navigate("/carlist");
+      }
       setBrand("");
       setType("sedan");
       setDescription("");

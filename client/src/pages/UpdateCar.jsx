@@ -9,6 +9,7 @@ const UpdateCar = () => {
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("sedan");
   const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(""); // New state for price
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ const UpdateCar = () => {
         setBrand(car.brand);
         setType(car.type);
         setDescription(car.description);
+        setPrice(car.price.toString()); // Assuming price is a number, convert to string
       } catch (error) {
         console.error("Error fetching car details:", error);
       }
@@ -35,6 +37,7 @@ const UpdateCar = () => {
       formData.append("brand", brand);
       formData.append("type", type);
       formData.append("description", description);
+      formData.append("price", price); // Append price to FormData
       if (image) {
         formData.append("carImage", image);
       }
@@ -56,6 +59,7 @@ const UpdateCar = () => {
         setBrand(updatedCar.brand);
         setType(updatedCar.type);
         setDescription(updatedCar.description);
+        setPrice(updatedCar.price.toString()); // Update price in state
         navigate("/carlist"); // Navigate after updating state
       }
       // Optionally handle success feedback or redirect
@@ -102,6 +106,16 @@ const UpdateCar = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium">Price:</label>
+            <input
+              type="text"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
+              required
             />
           </div>
           <div className="mb-4">
