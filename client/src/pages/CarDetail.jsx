@@ -44,7 +44,7 @@ const CarDetail = () => {
         }
       );
       setCartItems(response.data);
-      setIsInCart(true); // Update local state to reflect addition to cart
+      setIsInCart(true); 
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }

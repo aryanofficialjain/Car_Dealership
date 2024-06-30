@@ -1,5 +1,3 @@
-// AllCar.js
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -30,31 +28,18 @@ const AllCar = () => {
   const handleSearch = (filters) => {
     let filtered = cars.filter((car) => {
       let passFilter = true;
-      if (filters.priceFrom && car.price < parseInt(filters.priceFrom)) {
+      
+      if (filters.carType && car.type.toLowerCase() !== filters.carType.toLowerCase()) {
         passFilter = false;
       }
-      if (filters.priceTo && car.price > parseInt(filters.priceTo)) {
-        passFilter = false;
-      }
-      if (
-        filters.carType &&
-        car.type.toLowerCase() !== filters.carType.toLowerCase()
-      ) {
-        passFilter = false;
-      }
-      if (
-        filters.brand &&
-        car.brand.toLowerCase() !== filters.brand.toLowerCase()
-      ) {
-        passFilter = false;
-      }
+      
       return passFilter;
     });
 
     setFilteredCars(filtered);
   };
 
-  const handleclick = (id) => {
+  const handleClick = (id) => {
     navigate(`/car/car/${id}`);
   };
 
@@ -68,7 +53,7 @@ const AllCar = () => {
           {filteredCars.map((car) => (
             <div
               key={car._id}
-              onClick={() => handleclick(car._id)}
+              onClick={() => handleClick(car._id)}
               className="bg-black rounded-lg p-4 cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
             >
               <div className="flex items-center justify-center mb-4">
