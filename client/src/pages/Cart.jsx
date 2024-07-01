@@ -6,10 +6,16 @@ import Navbar from "../components/Navbar";
 const Cart = () => {
   const { cartItems = [], setCartItems, token } = useContext(Context);
   const [loading, setLoading] = useState(true);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     fetchCartItems().finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    // Calculate total price whenever cartItems change
+    calculateTotalPrice();
+  }, [cartItems]);
 
   const fetchCartItems = async () => {
     try {
@@ -40,6 +46,20 @@ const Cart = () => {
     }
   };
 
+  const calculateTotalPrice = () => {
+    let total = 0;
+    cartItems.forEach((item) => {
+      total += item.price; // Assuming item.price is the price of each item
+    });
+    setTotalPrice(total);
+  };
+
+  // const handleIncreaseQuantity = (id) => {
+  //   // Logic to increase quantity of an item in the cart
+  //   // Example: You can implement this based on your backend logic or state management
+  //   console.log("Increase quantity of item with id:", id);
+  // };
+
   return (
     <div className="bg-gray-900 min-h-screen text-white">
       <Navbar />
@@ -64,6 +84,13 @@ const Cart = () => {
                   />
                   <div className="p-4">
                     <p className="text-lg font-bold">{item.brand} - {item.type}</p>
+                    <p className="text-gray-400">Price: ${item.price}</p>
+                    {/* <button
+                      onClick={() => handleIncreaseQuantity(item._id)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mt-2 mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      Increase Quantity
+                    </button> */}
                     <button
                       onClick={() => handleRemoveItem(item._id)}
                       className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-red-500"
@@ -74,6 +101,9 @@ const Cart = () => {
                 </li>
               ))}
             </ul>
+            <div className="mt-4 text-center">
+              <p className="text-xl font-bold">Total Price: ${totalPrice}</p>
+            </div>
           </>
         )}
       </div>

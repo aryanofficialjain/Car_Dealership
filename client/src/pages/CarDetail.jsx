@@ -80,6 +80,7 @@ const CarDetail = () => {
             <p className="text-xl font-semibold mb-2">{car.brand}</p>
             <p className="text-gray-300 mb-2">{car.type}</p>
             <p className="text-gray-400 mb-4">{car.description}</p>
+            <p className="text-white  mb-4">$ {car.price}</p>
             {isAdmin ? null : (
               isInCart ? (
                 <button
