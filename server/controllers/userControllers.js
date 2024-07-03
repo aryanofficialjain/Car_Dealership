@@ -17,11 +17,6 @@ const signupUser = async (req, res) => {
     return res.status(400).json("Fill all input Fields");
   }
 
-  let admin = false;
-
-  if(role === "admin"){
-    admin = true;
-  }
 
   const hashedpassword = await bcrypt.hash(password, 10);
 
@@ -34,7 +29,7 @@ const signupUser = async (req, res) => {
       profileImage,
     });
 
-    res.status(200).json({ message: "User Created Successfully", user, admin });
+    res.status(200).json({ message: "User Created Successfully", user, role });
   } catch (error) {
     console.log("Error while creating User", error);
     res.status(500).json("Error while creating a User");
@@ -62,12 +57,6 @@ const loginUser = async (req, res) => {
       return res.status(404).json("Password is incorrect");
     }
 
-    let admin = false;
-
-    if(user.role === "admin"){
-      admin = true;
-    }
-
     const token = jwt.sign(
       {
         username: user.username,
@@ -79,13 +68,15 @@ const loginUser = async (req, res) => {
       process.env.SECRET_KEY
     );
 
+    let role = user.role;
+
     return res
       .cookie("Token", token, {
         httpOnly: true,
         // Add other cookie options as needed for security
       })
       .status(200)
-      .json({ message: "You are logged in Successfully", token, admin });
+      .json({ message: "You are logged in Successfully", token, role });
   } catch (error) {
     console.log("Error while logging in", error);
     res.status(500).json({ message: "Error while logging IN" });

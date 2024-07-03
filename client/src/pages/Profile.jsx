@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Profile = () => {
-  const { token, setToken } = useContext(Context);
+  const { token, setToken, setIsAdmin } = useContext(Context);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ const Profile = () => {
   // Function to handle logout
   const handleLogout = () => {
     setToken(null);
+    setIsAdmin(null);
     navigate("/login");
   };
 

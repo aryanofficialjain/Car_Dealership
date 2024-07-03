@@ -1,13 +1,12 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const Context = createContext(null);
 
 export const ContextProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false); // Default isAdmin to false or null as per your application logic
+  const [isAdmin, setIsAdmin] = useState(""); // Ensure default value is null
 
-  // Retrieve token and isAdmin from localStorage on component mount
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedIsAdmin = localStorage.getItem("isAdmin");
@@ -16,24 +15,22 @@ export const ContextProvider = ({ children }) => {
       setToken(storedToken);
     }
 
-    // Parse storedIsAdmin as boolean if it exists
-    if (storedIsAdmin !== null) {
-      setIsAdmin(JSON.parse(storedIsAdmin));
+    if (storedIsAdmin) {
+      setIsAdmin(storedIsAdmin); // Ensure storedIsAdmin is parsed correctly
     }
-  }, []);
+  }, []); // Ensure this effect runs only once on mount
 
-  // Update localStorage when token or isAdmin change
+  useEffect(() => {
+    localStorage.setItem("isAdmin",isAdmin); // Store isAdmin as a string
+  }, [isAdmin]); // Update localStorage when isAdmin changes
+
   useEffect(() => {
     if (token) {
       localStorage.setItem("token", token);
     } else {
       localStorage.removeItem("token");
     }
-  }, [token]);
-
-  useEffect(() => {
-    localStorage.setItem("isAdmin", JSON.stringify(isAdmin));
-  }, [isAdmin]);
+  }, [token]); // Update localStorage when token changes
 
   return (
     <Context.Provider
@@ -43,3 +40,6 @@ export const ContextProvider = ({ children }) => {
     </Context.Provider>
   );
 };
+
+
+export default Context;

@@ -6,7 +6,7 @@ import { Context } from "../context/Context";
 
 const Login = () => {
   const [error, setError] = useState(null);
-  const { setToken, setisAdmin } = useContext(Context); // Assuming you have a Context for managing state
+  const { setToken, setIsAdmin } = useContext(Context); // Use setIsAdmin from Context
   const navigate = useNavigate();
   const [formdata, setFormdata] = useState({ email: "", password: "" });
 
@@ -25,9 +25,15 @@ const Login = () => {
         "http://localhost:8000/user/login",
         formdata
       );
+      console.log(response.data.role);
       if (response.status === 200) {
         setToken(response.data.token);
-        setisAdmin(response.data.admin);
+        if (response.data.role === "admin") {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+        }
+
         navigate("/profile");
       }
     } catch (error) {
@@ -88,9 +94,7 @@ const Login = () => {
               </button>
             </div>
           </form>
-          {error && (
-            <p className="text-red-500 text-sm mt-2">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
       </div>
     </div>
