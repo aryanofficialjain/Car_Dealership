@@ -57,9 +57,9 @@ const AllCar = () => {
               className="bg-black rounded-lg p-4 cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
             >
               <div className="flex items-center justify-center mb-4">
-                {car.carImage && (
+                {car.carImages && car.carImages.length > 0 && (
                   <img
-                    src={`http://localhost:8000/car/${car.carImage}`}
+                    src={`http://localhost:8000/car/${car.carImages[0]}`}
                     alt={`${car.brand} ${car.type}`}
                     className="max-w-full h-auto rounded-lg"
                   />

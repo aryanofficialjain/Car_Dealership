@@ -11,9 +11,11 @@ const carSchema = new Schema({
     enum: ["suv", "supercar", "sedan"],
     default: "sedan",
   },
-  carImage: {
-    type: String,
-  },
+  carImages: [
+    {
+      type: String,
+    },
+  ],
   description: {
     type: String,
   },
@@ -23,7 +25,7 @@ const carSchema = new Schema({
   },
   price: {
     type: Number,
-  },  
+  },
 });
 
 const Car = model("Car", carSchema);

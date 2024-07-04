@@ -9,8 +9,8 @@ const CarForm = () => {
   const [brand, setBrand] = useState("");
   const [type, setType] = useState("sedan");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
-  const [price, setPrice] = useState(""); // Added state for price
+  const [carImages, setcarImage] = useState([]);
+  const [price, setPrice] = useState("");
   const { token } = useContext(Context);
 
   const handleFormSubmit = async (e) => {
@@ -21,8 +21,13 @@ const CarForm = () => {
       formData.append("brand", brand);
       formData.append("type", type);
       formData.append("description", description);
-      formData.append("carImage", image);
-      formData.append("price", price); // Append price to form data
+      formData.append("price", price);
+
+      // Append each image file to formData
+      for (let i = 0; i < carImages.length; i++) {
+        formData.append("carImages", carImages[i]);
+      }
+
 
       const res = await axios.post(
         "http://localhost:8000/car/addcar",
@@ -36,23 +41,25 @@ const CarForm = () => {
       );
 
       console.log(res.data);
-      if(res.status === 201){
+      if (res.status === 201) {
         navigate("/carlist");
       }
       setBrand("");
       setType("sedan");
       setDescription("");
-      setImage(null);
-      setPrice(""); // Clear price input after submission
+      setcarImage([]);
+      setPrice("");
     } catch (error) {
       console.error("Error adding car:", error);
       alert("Error adding car. Please try again.");
     }
   };
 
-  const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setcarImage(files);
   };
+
 
   return (
     <div className="bg-gray-900 min-h-screen text-white">
@@ -101,11 +108,12 @@ const CarForm = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium">Car Image:</label>
+            <label className="block text-sm font-medium">Images:</label>
             <input
-              type="file"
-              onChange={handleFileChange}
+              type="file" name="carImages"
+              onChange={handleImageChange}
               accept="image/*"
+              multiple
               className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
               required
             />
@@ -114,7 +122,8 @@ const CarForm = () => {
             type="submit"
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            Add Car
+          
+            Adfd Car
           </button>
         </form>
       </div>

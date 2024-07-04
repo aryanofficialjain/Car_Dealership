@@ -6,7 +6,6 @@ import Navbar from '../components/Navbar';
 const CarList = () => {
   const [cars, setCars] = useState([]);
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -22,15 +21,12 @@ const CarList = () => {
   }, []);
 
   const handleUpdate = (id) => {
-    console.log(id);
-    navigate(`/update/${id}`)
+    navigate(`/update/${id}`);
   };
 
   const handleDelete = async (id) => {
-    console.log(id);
     try {
       await axios.delete(`http://localhost:8000/car/car/${id}`);
-      
       setCars(cars.filter(car => car._id !== id));
       console.log(`Deleted car with id ${id}`);
     } catch (error) {
@@ -39,12 +35,12 @@ const CarList = () => {
   };
 
   const handleAdd = () => {
-    navigate("/addcar")
-  }
+    navigate("/addcar");
+  };
 
   return (
     <div className="bg-gray-900 min-h-screen text-white">
-        <Navbar/>
+      <Navbar />
       <div className="container mx-auto p-4">
         <h2 className="text-center mb-4 text-2xl font-bold">Car List</h2>
         <button onClick={handleAdd} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">Add</button>
@@ -68,9 +64,9 @@ const CarList = () => {
                   <td className="py-3 px-6 text-left">{car.description}</td>
                   <td className="py-3 px-6 text-left">${car.price}</td>
                   <td className="py-3 px-6 text-left">
-                    {car.carImage && (
+                    {car.carImages && car.carImages.length > 0 && (
                       <img
-                        src={`http://localhost:8000/car/${car.carImage}`}
+                        src={`http://localhost:8000/car/${car.carImages[0]}`}
                         alt={car.brand}
                         className="w-16 h-16 object-cover"
                       />
