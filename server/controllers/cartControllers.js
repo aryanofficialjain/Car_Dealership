@@ -174,23 +174,25 @@ const BuyCar = async (req, res) => {
     }
 
     // Add purchased cars to user's purchasedCars array
-    user.purchasedCars.push(...cars.map(car => car._id));
+    user.purchasedCars.push(...cars.map((car) => car._id));
     await user.save();
 
     // Remove purchased cars from user's cart
-    user.cart = user.cart.filter(cartCarId => !ids.includes(cartCarId.toString()));
+    user.cart = user.cart.filter(
+      (cartCarId) => !ids.includes(cartCarId.toString())
+    );
     await user.save();
 
-    return res.status(200).json({ message: "Cars purchased successfully", user });
+    return res
+      .status(200)
+      .json({ message: "Cars purchased successfully", user });
   } catch (error) {
     console.error("Error purchasing cars:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-
-
-const GetUserAndCar = () => {};
+const GetUserAndCar = async (req, res) => {};
 
 const DeleteUserAndCar = () => {};
 

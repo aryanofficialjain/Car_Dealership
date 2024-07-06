@@ -7,7 +7,7 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { cartItems = [], setCartItems, token } = useContext(Context);
+  const { cartItems = [], setCartItems, token, setUserId } = useContext(Context);
   const [loading, setLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
@@ -47,7 +47,8 @@ const Cart = () => {
 
       console.log(response.data);
       if (response.status === 200) {
-        alert("Order Succesfull")
+        alert("Order Succesfull");
+        setUserId(token);
       }
     } catch (error) {
       console.error("Error buying cars:", error);
