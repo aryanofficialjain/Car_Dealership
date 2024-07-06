@@ -47,7 +47,7 @@ const Cart = () => {
 
       console.log(response.data);
       if (response.status === 200) {
-        navigate("/dashboard");
+        alert("Order Succesfull")
       }
     } catch (error) {
       console.error("Error buying cars:", error);
