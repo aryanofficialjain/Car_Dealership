@@ -48,24 +48,22 @@ const Cart = () => {
 
   const calculateTotalPrice = () => {
     let total = 0;
-    cartItems.forEach((item) => {
-      total += item.price; // Assuming item.price is the price of each item
-    });
+    if (cartItems && cartItems.length > 0) {
+      cartItems.forEach((item) => {
+        total += item.price; // Assuming item.price is the price of each item
+      });
+    }
     setTotalPrice(total);
   };
-
-  // const handleIncreaseQuantity = (id) => {
-  //   // Logic to increase quantity of an item in the cart
-  //   // Example: You can implement this based on your backend logic or state management
-  //   console.log("Increase quantity of item with id:", id);
-  // };
 
   return (
     <div className="bg-gray-900 min-h-screen text-white">
       <Navbar />
       <div className="container mx-auto p-4">
         {loading ? (
-          <p>Loading...</p>
+          <div className="flex items-center justify-center h-screen">
+            <div className="ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+          </div>
         ) : cartItems.length === 0 ? (
           <p className="text-center">Your Cart is Empty</p>
         ) : (
@@ -78,19 +76,13 @@ const Cart = () => {
                   className="bg-black rounded-lg overflow-hidden shadow-lg"
                 >
                   <img
-                    src={`http://localhost:8000/car/${item.carImage}`}
+                    src={`http://localhost:8000/car/${item.carImages[0]}`}
                     alt={`${item.brand} ${item.type}`}
                     className="w-full"
                   />
                   <div className="p-4">
                     <p className="text-lg font-bold">{item.brand} - {item.type}</p>
                     <p className="text-gray-400">Price: ${item.price}</p>
-                    {/* <button
-                      onClick={() => handleIncreaseQuantity(item._id)}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mt-2 mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      Increase Quantity
-                    </button> */}
                     <button
                       onClick={() => handleRemoveItem(item._id)}
                       className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg mt-2 focus:outline-none focus:ring-2 focus:ring-red-500"
@@ -103,6 +95,9 @@ const Cart = () => {
             </ul>
             <div className="mt-4 text-center">
               <p className="text-xl font-bold">Total Price: ${totalPrice}</p>
+              <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg mt-4 focus:outline-none focus:ring-2 focus:ring-green-500">
+                BUY
+              </button>
             </div>
           </>
         )}

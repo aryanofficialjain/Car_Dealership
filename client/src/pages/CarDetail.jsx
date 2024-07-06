@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import { Context } from "../context/Context";
-import Navbar from "../components/Navbar";
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { Context } from '../context/Context';
+import Navbar from '../components/Navbar';
 
 const CarDetail = () => {
   const [car, setCar] = useState(null);
@@ -11,76 +11,91 @@ const CarDetail = () => {
   const { isAdmin, token, cartItems, setCartItems } = useContext(Context);
   const [isInCart, setIsInCart] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCarDetail = async () => {
       try {
         const response = await axios.get(`http://localhost:8000/car/car/${id}`);
         setCar(response.data);
-        // Check if car is already in cart
-        const foundInCart = cartItems.some((item) => item._id === response.data._id);
-        setIsInCart(foundInCart);
+        
+        // Check if cartItems is an array before using array methods
+        if (Array.isArray(cartItems)) {
+          const foundInCart = cartItems.some(item => item._id === response.data._id);
+          setIsInCart(foundInCart);
+        } else {
+          setCartItems([]); // Initialize cartItems as an empty array if not fetched correctly
+        }
       } catch (error) {
-        console.error("Error fetching car details:", error);
-        setError(error.message);
+        console.error('Error fetching car details:', error);
+        setError('Failed to fetch car details.');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCarDetail();
-  }, [id, cartItems]);
+  }, [id, cartItems, setCartItems]);
 
   useEffect(() => {
     const fetchSuggestedCars = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/car/allcars");
-        // Filter out the current car from suggested cars
-        const filteredCars = response.data.filter((c) => c._id !== id);
+        const response = await axios.get('http://localhost:8000/car/allcars');
+        const filteredCars = response.data.filter(c => c._id !== id);
         setSuggestedCars(filteredCars);
       } catch (error) {
-        console.error("Error fetching suggested cars:", error);
-        setError(error.message);
+        console.error('Error fetching suggested cars:', error);
+        setError('Failed to fetch suggested cars.');
       }
     };
 
     fetchSuggestedCars();
   }, [id]);
 
-  if (!car) {
-    return <div className="bg-gray-900 min-h-screen text-white flex items-center justify-center">Loading...</div>;
-  }
-
-  const handleAddToCart = async (carId) => {
+  const handleAddToCart = async carId => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/cart/additem",
+        'http://localhost:8000/cart/additem',
         { carid: carId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setCartItems(response.data);
-      setIsInCart(true); 
+      setIsInCart(true);
     } catch (error) {
-      console.error("Error adding item to cart:", error);
+      console.error('Error adding item to cart:', error);
+      setError('Failed to add item to cart.');
     }
   };
 
-  const handleRemoveFromCart = async (carId) => {
+  const handleRemoveFromCart = async carId => {
     try {
-      const response = await axios.delete(`http://localhost:8000/cart/deleteitem`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: { itemId: carId },
+      const response = await axios.delete('http://localhost:8000/cart/deleteitem', {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { itemId: carId }
       });
       setCartItems(response.data);
-      setIsInCart(false); // Update local state to reflect removal from cart
+      setIsInCart(false);
     } catch (error) {
-      console.error("Error removing item from cart:", error);
+      console.error('Error removing item from cart:', error);
+      setError('Failed to remove item from cart.');
     }
   };
+
+  if (loading) {
+    return (
+      <div className="bg-gray-900 min-h-screen text-white flex items-center justify-center">
+        <div className="ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16" />
+      </div>
+    );
+  }
+
+  if (!car) {
+    return (
+      <div className="bg-gray-900 min-h-screen text-white flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-900 min-h-screen text-white">
@@ -99,46 +114,55 @@ const CarDetail = () => {
               )}
             </div>
             <div className="grid grid-cols-3 gap-4">
-              {car.carImages && car.carImages.map((image, index) => (
-                <div key={index} className="cursor-pointer hover:shadow-lg transition duration-300 ease-in-out">
-                  <img
-                    src={`http://localhost:8000/car/${image}`}
-                    alt={`${car.brand} ${car.type} ${index}`}
-                    className="w-full h-auto rounded-lg"
-                  />
-                </div>
-              ))}
+              {car.carImages &&
+                car.carImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className="cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
+                  >
+                    <img
+                      src={`http://localhost:8000/car/${image}`}
+                      alt={`${car.brand} ${car.type} ${index}`}
+                      className="w-full h-auto rounded-lg"
+                    />
+                  </div>
+                ))}
             </div>
           </div>
           <div>
             <p className="text-xl font-semibold mb-2">{car.brand}</p>
             <p className="text-gray-300 mb-2">{car.type}</p>
             <p className="text-gray-400 mb-4">{car.description}</p>
-            <p className="text-white  mb-4">$ {car.price}</p>
-            {isAdmin ? null : (
-              isInCart ? (
-                <button
-                  onClick={() => handleRemoveFromCart(car._id)}
-                  className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  Remove from Cart
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleAddToCart(car._id)}
-                  className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  Add to Cart
-                </button>
-              )
+            <p className="text-white mb-4">${car.price}</p>
+            {!isAdmin && token && (
+              <>
+                {isInCart ? (
+                  <button
+                    onClick={() => handleRemoveFromCart(car._id)}
+                    className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    Remove from Cart
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleAddToCart(car._id)}
+                    className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    Add to Cart
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-4">Suggested Cars</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {suggestedCars.map((car) => (
-              <div key={car._id} className="bg-black rounded-lg p-4 cursor-pointer hover:shadow-lg transition duration-300 ease-in-out">
+            {suggestedCars.map(car => (
+              <div
+                key={car._id}
+                className="bg-black rounded-lg p-4 cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
+              >
                 <img
                   src={`http://localhost:8000/car/${car.carImages[0]}`}
                   alt={`${car.brand} ${car.type}`}

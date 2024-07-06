@@ -6,6 +6,7 @@ import { Context } from "../context/Context";
 
 const Navbar = () => {
   const { token, isAdmin } = useContext(Context);
+  console.log(token, isAdmin);
 
   return (
     <nav className="bg-gray-900 p-4 flex justify-center items-center relative">

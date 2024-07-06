@@ -5,7 +5,7 @@ export const Context = createContext(null);
 export const ContextProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(""); // Ensure default value is null
+  const [isAdmin, setIsAdmin] = useState(null); // Ensure default value is null
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -15,13 +15,15 @@ export const ContextProvider = ({ children }) => {
       setToken(storedToken);
     }
 
-    if (storedIsAdmin) {
-      setIsAdmin(storedIsAdmin); // Ensure storedIsAdmin is parsed correctly
+    if (storedIsAdmin !== null) {
+      setIsAdmin(JSON.parse(storedIsAdmin)); // Parse storedIsAdmin from string to boolean
     }
   }, []); // Ensure this effect runs only once on mount
 
   useEffect(() => {
-    localStorage.setItem("isAdmin",isAdmin); // Store isAdmin as a string
+    if (isAdmin !== null) {
+      localStorage.setItem("isAdmin", isAdmin.toString()); // Store isAdmin as a string
+    }
   }, [isAdmin]); // Update localStorage when isAdmin changes
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export const ContextProvider = ({ children }) => {
     } else {
       localStorage.removeItem("token");
     }
-  }, [token]); // Update localStorage when token changes
+  }, [token]); 
 
   return (
     <Context.Provider
@@ -40,6 +42,5 @@ export const ContextProvider = ({ children }) => {
     </Context.Provider>
   );
 };
-
 
 export default Context;

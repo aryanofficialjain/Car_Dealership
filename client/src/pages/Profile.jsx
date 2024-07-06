@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 const Profile = () => {
   const { token, setToken, setIsAdmin } = useContext(Context);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // State for managing loading state
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -19,9 +20,11 @@ const Profile = () => {
         },
       });
       setUser(response.data.user); // Assuming response.data.user contains user data
+      setLoading(false); // Set loading to false after data is fetched
     } catch (error) {
       console.error("Error fetching user profile:", error);
       setError(error.response.data.message || error.message);
+      setLoading(false); // Set loading to false in case of error
     }
   };
 
@@ -59,6 +62,14 @@ const Profile = () => {
       fetchUserProfile();
     }
   }, [token]);
+
+  if (loading) {
+    return (
+      <div className="bg-gray-900 min-h-screen flex items-center justify-center">
+        <div className="ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-900 min-h-screen flex flex-col items-center justify-center">

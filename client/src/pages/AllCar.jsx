@@ -7,6 +7,7 @@ import SearchBar from "../components/SearchBar";
 const AllCar = () => {
   const [cars, setCars] = useState([]);
   const [filteredCars, setFilteredCars] = useState([]);
+  const [loading, setLoading] = useState(true); // State for managing loading state
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -16,9 +17,11 @@ const AllCar = () => {
         const response = await axios.get("http://localhost:8000/car/allcars");
         setCars(response.data);
         setFilteredCars(response.data);
+        setLoading(false); // Set loading to false after data is fetched
       } catch (error) {
         console.error("Error fetching cars:", error);
         setError(error.message);
+        setLoading(false); // Set loading to false in case of error
       }
     };
 
@@ -42,6 +45,14 @@ const AllCar = () => {
   const handleClick = (id) => {
     navigate(`/car/car/${id}`);
   };
+
+  if (loading) {
+    return (
+      <div className="bg-gray-900 min-h-screen text-white flex items-center justify-center">
+        <div className="ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-900 min-h-screen text-white">
