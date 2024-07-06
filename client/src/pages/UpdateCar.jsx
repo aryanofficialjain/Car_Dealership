@@ -10,7 +10,7 @@ const UpdateCar = () => {
   const [type, setType] = useState("sedan");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(""); // New state for price
-  const [image, setImage] = useState(null);
+  const [carImages, setCarImages] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,8 +38,8 @@ const UpdateCar = () => {
       formData.append("type", type);
       formData.append("description", description);
       formData.append("price", price); // Append price to FormData
-      if (image) {
-        formData.append("carImage", image);
+      if (carImages) {
+        formData.append("carImages", carImages);
       }
 
       const res = await axios.put(
@@ -70,8 +70,9 @@ const UpdateCar = () => {
   };
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0]);
+    setCarImages([...carImages, ...e.target.files]);
   };
+  
 
   return (
     <div className="bg-gray-900 min-h-screen text-white">
@@ -124,6 +125,7 @@ const UpdateCar = () => {
               type="file"
               onChange={handleFileChange}
               accept="image/*"
+              multiple name="carImages"
               className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
             />
           </div>

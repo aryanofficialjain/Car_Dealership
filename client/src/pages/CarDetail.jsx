@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { Context } from '../context/Context';
 import Navbar from '../components/Navbar';
 
@@ -12,6 +12,7 @@ const CarDetail = () => {
   const [isInCart, setIsInCart] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCarDetail = async () => {
@@ -89,6 +90,10 @@ const CarDetail = () => {
     );
   }
 
+  const handleCar = (id) => {
+    navigate(`/car/car/${id}`);
+  }
+
   if (!car) {
     return (
       <div className="bg-gray-900 min-h-screen text-white flex items-center justify-center">
@@ -160,7 +165,7 @@ const CarDetail = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {suggestedCars.map(car => (
               <div
-                key={car._id}
+                key={car._id} onClick={() => handleCar(car._id)}
                 className="bg-black rounded-lg p-4 cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
               >
                 <img

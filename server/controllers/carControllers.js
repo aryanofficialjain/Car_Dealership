@@ -107,6 +107,8 @@ const UpdateCar = async (req, res) => {
     return res.status(404).json("Your are an Admin");
   }
 
+  const carImages = req.files?.map((file) => file.filename);
+
   try {
     const updatedCar = await Car.findByIdAndUpdate(
       id,
@@ -115,7 +117,7 @@ const UpdateCar = async (req, res) => {
         type,
         description,
         price,
-        carImage: req.file ? req.file.filename : null,
+        carImages: carImages, 
       },
       { new: true }
     );

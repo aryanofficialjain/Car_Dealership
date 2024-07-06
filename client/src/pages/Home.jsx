@@ -24,7 +24,7 @@ const Home = () => {
   }, []);
 
   const handleClick = (carId) => {
-    navigate(`/car/${carId}`);
+    navigate(`/car/car/${carId}`);
   };
 
   const handleClickstart = () => {
