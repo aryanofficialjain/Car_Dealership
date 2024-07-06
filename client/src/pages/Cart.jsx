@@ -1,12 +1,16 @@
+// Cart.js
+
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cartItems = [], setCartItems, token } = useContext(Context);
   const [loading, setLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCartItems().finally(() => setLoading(false));
@@ -25,9 +29,28 @@ const Cart = () => {
         },
       });
       setCartItems(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching cart items:", error);
-      setCartItems([]); // Set cartItems to an empty array on error
+      setCartItems([]);
+    }
+  };
+
+  const handleBuy = async () => {
+    try {
+      const carIds = cartItems.map((item) => item._id);
+      const response = await axios.post("http://localhost:8000/cart/buy", { ids: carIds }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response.data);
+      if (response.status === 200) {
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Error buying cars:", error);
     }
   };
 
@@ -95,7 +118,7 @@ const Cart = () => {
             </ul>
             <div className="mt-4 text-center">
               <p className="text-xl font-bold">Total Price: ${totalPrice}</p>
-              <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg mt-4 focus:outline-none focus:ring-2 focus:ring-green-500">
+              <button onClick={handleBuy} className="bg-green-500 hover:bg-green-700 text-white px-6 py-3 rounded-lg mt-4 focus:outline-none focus:ring-2 focus:ring-green-500">
                 BUY
               </button>
             </div>

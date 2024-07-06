@@ -21,12 +21,10 @@ const userSchema = new Schema({
   profileImage: {
     type: String,
   },
-  cart: [{type: Schema.Types.ObjectId, ref: 'Car'}]
+  cart: [{ type: Schema.Types.ObjectId, ref: "Car" }],
+  purchasedCars: [{ type: Schema.Types.ObjectId, ref: "Car" }],
 });
-
 
 const User = new model("users", userSchema);
 
-
 module.exports = User;
-
