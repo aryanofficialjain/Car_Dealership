@@ -8,6 +8,5 @@ router.delete("/deleteitem", cartControllers.DeleteItem);
 router.post("/buy", cartControllers.BuyCar);
 router.get("/buy", cartControllers.GetUserAndCar);
 router.delete("/buy", cartControllers.DeleteUserAndCar);
-router.get("/buy/:id", cartControllers.GetUserAndHisCar);
 
 module.exports = router;

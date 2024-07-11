@@ -26,6 +26,12 @@ const carSchema = new Schema({
   price: {
     type: Number,
   },
+  buyers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 const Car = model("Car", carSchema);

@@ -1,5 +1,3 @@
-// Cart.js
-
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context";
@@ -29,7 +27,6 @@ const Cart = () => {
         },
       });
       setCartItems(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching cart items:", error);
       setCartItems([]);
@@ -38,21 +35,25 @@ const Cart = () => {
 
   const handleBuy = async () => {
     try {
-      const carIds = cartItems.map((item) => item._id);
+      const carIds = cartItems.map((item) => item._id.toString()); // Ensure item._id is converted to String if necessary
       const response = await axios.post("http://localhost:8000/cart/buy", { ids: carIds }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      console.log(response.data);
       if (response.status === 200) {
-        alert("Order Succesfully accepted");
+        alert("Order successfully accepted");
         setBuyerToken(token);
-        window.location.reload();
+        // Refresh cart items after successful purchase
+        fetchCartItems();
+      } else {
+        console.error("Failed to purchase cars:", response.data);
+        alert("Failed to purchase cars. Please try again later.");
       }
     } catch (error) {
       console.error("Error buying cars:", error);
+      alert("Failed to purchase cars. Please try again later.");
     }
   };
 
@@ -68,6 +69,7 @@ const Cart = () => {
       fetchCartItems();
     } catch (error) {
       console.error("Error removing item from cart:", error);
+      alert("Failed to remove item from cart. Please try again later.");
     }
   };
 

@@ -144,7 +144,6 @@ const DeleteItem = async (req, res) => {
 };
 
 // purchase controllers
-
 const BuyCar = async (req, res) => {
   try {
     const { ids } = req.body; // Array of car IDs to purchase
@@ -173,9 +172,11 @@ const BuyCar = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Add purchased cars to user's purchasedCars array
-    user.purchasedCars.push(...cars.map((car) => car._id));
-    await user.save();
+    // Update each car's buyers array with the purchasing user
+    for (let car of cars) {
+      car.buyers.push(user._id);
+      await car.save();
+    }
 
     // Remove purchased cars from user's cart
     user.cart = user.cart.filter(
@@ -183,20 +184,66 @@ const BuyCar = async (req, res) => {
     );
     await user.save();
 
-    return res
-      .status(200)
-      .json({ message: "Cars purchased successfully", user });
+    // Respond with success message and updated user information
+    return res.status(200).json({ message: "Cars purchased successfully", cars });
   } catch (error) {
     console.error("Error purchasing cars:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-const GetUserAndCar = async (req, res) => {};
 
-const DeleteUserAndCar = () => {};
 
-const GetUserAndHisCar = () => {};
+const GetUserAndCar = async (req, res) => {
+  try {
+    // Fetch all cars and populate 'buyers' array with user details
+    const cars = await Car.find({})
+      .populate({
+        path: 'buyers',
+        select: 'username profileImage email', // Select fields to populate
+        model: 'User' // Model name to populate from
+      });
+
+    // Return cars array with populated buyers for each car
+    return res.status(200).json({ cars });
+  } catch (error) {
+    console.error('Error fetching cars and buyers:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
+const DeleteUserAndCar = async (req, res) => {
+  const { carId, buyerId } = req.body;
+
+  try {
+    // Assuming you have models imported and set up correctly
+    const car = await Car.findById(carId);
+
+    if (!car) {
+      return res.status(404).json({ error: 'Car not found' });
+    }
+
+    // Check if the buyer exists in the car's buyers array
+    const buyerIndex = car.buyers.findIndex(b => b.equals(buyerId));
+    if (buyerIndex === -1) {
+      return res.status(404).json({ error: 'Buyer not found in car' });
+    }
+
+    // Remove the buyer from the car's buyers array
+    car.buyers.splice(buyerIndex, 1);
+    await car.save();
+
+
+    return res.status(200).json({ message: 'Buyer deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting buyer:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
 module.exports = {
   AddItem,
@@ -204,6 +251,5 @@ module.exports = {
   DeleteItem,
   BuyCar,
   DeleteUserAndCar,
-  GetUserAndCar,
-  GetUserAndHisCar,
+  GetUserAndCar
 };

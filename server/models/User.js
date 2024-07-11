@@ -22,9 +22,8 @@ const userSchema = new Schema({
     type: String,
   },
   cart: [{ type: Schema.Types.ObjectId, ref: "Car" }],
-  purchasedCars: [{ type: Schema.Types.ObjectId, ref: "Car" }],
 });
 
-const User = new model("users", userSchema);
+const User = new model("User", userSchema);
 
 module.exports = User;
