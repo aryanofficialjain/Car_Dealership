@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import {  useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Context } from '../context/Context';
 import Navbar from '../components/Navbar';
 
@@ -8,7 +8,7 @@ const CarDetail = () => {
   const [car, setCar] = useState(null);
   const [suggestedCars, setSuggestedCars] = useState([]);
   const { id } = useParams();
-  const { isAdmin, token, cartItems, setCartItems } = useContext(Context);
+  const { isAdmin, token, cartItems, setCartItems, setbuyCarId } = useContext(Context);
   const [isInCart, setIsInCart] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,6 +82,11 @@ const CarDetail = () => {
     }
   };
 
+  const handleBuyNow = (id) => {
+    navigate('/address');
+    setbuyCarId([id]) // Navigate to /address route when Buy Now button is clicked
+  };
+
   if (loading) {
     return (
       <div className="bg-gray-900 min-h-screen text-white flex items-center justify-center">
@@ -90,16 +95,16 @@ const CarDetail = () => {
     );
   }
 
-  const handleCar = (id) => {
-    navigate(`/car/car/${id}`);
-  }
-
   if (!car) {
     return (
       <div className="bg-gray-900 min-h-screen text-white flex items-center justify-center">
         Loading...
       </div>
     );
+  }
+
+  const handleclick = (id) => {
+    navigate(`/car/car/${id}`);
   }
 
   return (
@@ -149,12 +154,20 @@ const CarDetail = () => {
                     Remove from Cart
                   </button>
                 ) : (
-                  <button
-                    onClick={() => handleAddToCart(car._id)}
-                    className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    Add to Cart
-                  </button>
+                  <>
+                    <button
+                      onClick={() => handleAddToCart(car._id)}
+                      className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500 mr-4"
+                    >
+                      Add to Cart
+                    </button>
+                    <button
+                      onClick={() => handleBuyNow(car._id)}
+                      className="bg-purple-900 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    >
+                      Buy Now
+                    </button>
+                  </>
                 )}
               </>
             )}
@@ -165,7 +178,7 @@ const CarDetail = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {suggestedCars.map(car => (
               <div
-                key={car._id} onClick={() => handleCar(car._id)}
+                key={car._id} onClick={ () => handleclick(car._id)}
                 className="bg-black rounded-lg p-4 cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
               >
                 <img

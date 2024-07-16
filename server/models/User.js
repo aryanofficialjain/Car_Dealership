@@ -22,8 +22,22 @@ const userSchema = new Schema({
     type: String,
   },
   cart: [{ type: Schema.Types.ObjectId, ref: "Car" }],
+  address: {
+    city: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    pinCode: {
+      type: String,
+    },
+  },
 });
 
-const User = new model("User", userSchema);
+const User = model("User", userSchema);
 
 module.exports = User;

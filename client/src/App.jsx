@@ -13,6 +13,9 @@ import Cart from "./pages/Cart";
 import UpdateCar from "./pages/UpdateCar";
 import CarList from "./pages/CarList";
 import Dashboard from "./pages/Dashboard";
+import Address from "./pages/Address";
+import Pay from "./pages/Pay";
+import Review from "./pages/Review";
 
 const App = () => {
   const { token, isAdmin } = useContext(Context);
@@ -20,6 +23,9 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/address" element={<Address/>}/>
+      <Route path="/pay" element={<Pay/>} />
+      <Route path="/review" element={<Review/>}/>
       
       {/* Routes for non-user (not logged in) */}
       {!token && (
@@ -39,6 +45,7 @@ const App = () => {
           <Route path="/car/car/:id" element={<CarDetail />} />
           <Route path="/allcars" element={<AllCar />} />
           <Route path="/update" element={<Update />} />
+
         </>
       )}
 

@@ -49,7 +49,6 @@ const CarTable = () => {
       setCars(updatedCars);
     } catch (error) {
       console.error("Error deleting buyer:", error);
-      // Handle error (show error message, etc.)
     }
   };
 

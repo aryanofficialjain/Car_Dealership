@@ -7,6 +7,7 @@ export const ContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isAdmin, setIsAdmin] = useState(null); // Ensure default value is null
   const [BuyerToken, setBuyerToken] = useState(null);
+  const [buyCarId, setbuyCarId] = useState([]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -33,11 +34,22 @@ export const ContextProvider = ({ children }) => {
     } else {
       localStorage.removeItem("token");
     }
-  }, [token]); 
+  }, [token]);
 
   return (
     <Context.Provider
-      value={{ token, setToken, cartItems, setCartItems, isAdmin, setIsAdmin, setBuyerToken, BuyerToken }}
+      value={{
+        token,
+        setToken,
+        cartItems,
+        setCartItems,
+        isAdmin,
+        setIsAdmin,
+        setbuyCarId,
+        buyCarId,
+        setBuyerToken,
+        BuyerToken,
+      }}
     >
       {children}
     </Context.Provider>

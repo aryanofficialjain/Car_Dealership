@@ -185,34 +185,31 @@ const BuyCar = async (req, res) => {
     await user.save();
 
     // Respond with success message and updated user information
-    return res.status(200).json({ message: "Cars purchased successfully", cars });
+    return res
+      .status(200)
+      .json({ message: "Cars purchased successfully", cars });
   } catch (error) {
     console.error("Error purchasing cars:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-
-
 const GetUserAndCar = async (req, res) => {
   try {
     // Fetch all cars and populate 'buyers' array with user details
-    const cars = await Car.find({})
-      .populate({
-        path: 'buyers',
-        select: 'username profileImage email', // Select fields to populate
-        model: 'User' // Model name to populate from
-      });
+    const cars = await Car.find({}).populate({
+      path: "buyers",
+      select: "username profileImage email", // Select fields to populate
+      model: "User", // Model name to populate from
+    });
 
     // Return cars array with populated buyers for each car
     return res.status(200).json({ cars });
   } catch (error) {
-    console.error('Error fetching cars and buyers:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching cars and buyers:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
 
 const DeleteUserAndCar = async (req, res) => {
   const { carId, buyerId } = req.body;
@@ -222,28 +219,70 @@ const DeleteUserAndCar = async (req, res) => {
     const car = await Car.findById(carId);
 
     if (!car) {
-      return res.status(404).json({ error: 'Car not found' });
+      return res.status(404).json({ error: "Car not found" });
     }
 
     // Check if the buyer exists in the car's buyers array
-    const buyerIndex = car.buyers.findIndex(b => b.equals(buyerId));
+    const buyerIndex = car.buyers.findIndex((b) => b.equals(buyerId));
     if (buyerIndex === -1) {
-      return res.status(404).json({ error: 'Buyer not found in car' });
+      return res.status(404).json({ error: "Buyer not found in car" });
     }
 
     // Remove the buyer from the car's buyers array
     car.buyers.splice(buyerIndex, 1);
     await car.save();
 
-
-    return res.status(200).json({ message: 'Buyer deleted successfully' });
+    return res.status(200).json({ message: "Buyer deleted successfully" });
   } catch (error) {
-    console.error('Error deleting buyer:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error deleting buyer:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 
+const AddAddress = async (req, res) => {
+  try {
+    // Extract token from Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    const token = authHeader.split(" ")[1];
+    console.log(token);
+
+    // Verify and decode the token
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+    if (!decodedToken) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    // Retrieve user based on decoded token
+    const user = await User.findById(decodedToken.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Extract address details from request body
+    const { city, country, phone, pinCode } = req.body;
+
+    // Update user's address
+    user.address = {
+      city,
+      country,
+      phone,
+      pinCode,
+    };
+
+    // Save updated user data
+    await user.save();
+
+    // Respond with success message
+    res.status(200).json({ message: "Address added successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 module.exports = {
   AddItem,
@@ -251,5 +290,6 @@ module.exports = {
   DeleteItem,
   BuyCar,
   DeleteUserAndCar,
-  GetUserAndCar
+  GetUserAndCar,
+  AddAddress,
 };

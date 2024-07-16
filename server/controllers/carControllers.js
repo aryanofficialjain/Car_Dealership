@@ -154,4 +154,47 @@ const DeleteCar = async (req, res) => {
   }
 };
 
-module.exports = { AddCar, AllCar, CarDetails, UpdateCar, DeleteCar };
+const Review = async (req, res) => {
+  const { id, comment, rating } = req.body;
+
+  try {
+    const car = await Car.findById(id);
+
+    if (!car) {
+      return res.status(404).json({ error: "Car not found" });
+    }
+
+    // Extract token from Authorization header
+    const token = req.headers.authorization.split(" ")[1];
+
+    // Decode the token to get the payload (which should include username)
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY); // Replace with your actual JWT secret
+
+    const username = decodedToken.username;
+
+    // Prepare the review object
+    const newReview = {
+      rating: rating,
+      comment: comment,
+      reviewedBy: username,
+    };
+
+    // Handle uploaded images
+    if (req.files && req.files.length > 0) {
+      newReview.images = req.files.map(file => file.path); // Assuming files are stored with multer and file.path contains the path to the uploaded image
+    }
+
+    // Push the review into the car's reviews array and save
+    car.reviews.push(newReview);
+    await car.save();
+
+    res.status(201).json({ message: "Review added successfully", review: newReview });
+  } catch (err) {
+    console.error("Error adding review:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
+
+module.exports = { AddCar, AllCar, CarDetails, UpdateCar, DeleteCar, Review };

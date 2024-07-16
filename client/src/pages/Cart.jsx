@@ -33,28 +33,29 @@ const Cart = () => {
     }
   };
 
-  const handleBuy = async () => {
-    try {
-      const carIds = cartItems.map((item) => item._id.toString()); // Ensure item._id is converted to String if necessary
-      const response = await axios.post("http://localhost:8000/cart/buy", { ids: carIds }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  const handleBuy =  () => {
+    navigate("/address");
+    // try {
+    //   const carIds = cartItems.map((item) => item._id.toString()); // Ensure item._id is converted to String if necessary
+    //   const response = await axios.post("http://localhost:8000/cart/buy", { ids: carIds }, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   });
 
-      if (response.status === 200) {
-        alert("Order successfully accepted");
-        setBuyerToken(token);
-        // Refresh cart items after successful purchase
-        fetchCartItems();
-      } else {
-        console.error("Failed to purchase cars:", response.data);
-        alert("Failed to purchase cars. Please try again later.");
-      }
-    } catch (error) {
-      console.error("Error buying cars:", error);
-      alert("Failed to purchase cars. Please try again later.");
-    }
+    //   if (response.status === 200) {
+    //     alert("Order successfully accepted");
+    //     setBuyerToken(token);
+    //     // Refresh cart items after successful purchase
+    //     fetchCartItems();
+    //   } else {
+    //     console.error("Failed to purchase cars:", response.data);
+    //     alert("Failed to purchase cars. Please try again later.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error buying cars:", error);
+    //   alert("Failed to purchase cars. Please try again later.");
+    // }
   };
 
   const handleRemoveItem = async (id) => {
