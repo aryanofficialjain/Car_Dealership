@@ -155,7 +155,8 @@ const DeleteCar = async (req, res) => {
 };
 
 const Review = async (req, res) => {
-  const { id, comment, rating } = req.body;
+  const { comment, rating, id } = req.body; // Destructure id from req.body directly
+  console.log(req.body);
 
   try {
     const car = await Car.findById(id);
@@ -188,13 +189,12 @@ const Review = async (req, res) => {
     car.reviews.push(newReview);
     await car.save();
 
-    res.status(201).json({ message: "Review added successfully", review: newReview });
+    res.status(200).json({ message: "Review added successfully", review: newReview });
   } catch (err) {
     console.error("Error adding review:", err);
     res.status(500).json({ error: "Server error" });
   }
 };
-
 
 
 module.exports = { AddCar, AllCar, CarDetails, UpdateCar, DeleteCar, Review };

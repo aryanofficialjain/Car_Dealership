@@ -9,6 +9,7 @@ const Pay = () => {
   const navigate = useNavigate();
 
   const handleBuy = async () => {
+    
     try {
       // Check if cartItems has any items
       const carIds =

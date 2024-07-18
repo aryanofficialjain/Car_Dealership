@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import StarRating from '../components/Rating'; 
+import StarRating from '../components/Rating';
 import Context from '../context/Context';
 
-const ReviewForm = ({ carId }) => {
+const ReviewForm = () => {
   const [text, setText] = useState('');
-  const [rating, setRating] = useState(1); // Default rating
-  const [photo, setPhoto] = useState(null);
+  const [rating, setRating] = useState(1); 
+  const [photos, setPhotos] = useState([]); 
   const { token, buyCarId } = useContext(Context);
 
   const handleSubmit = async (e) => {
@@ -15,21 +15,26 @@ const ReviewForm = ({ carId }) => {
       const formData = new FormData();
       formData.append('comment', text);
       formData.append('rating', rating);
-      if (photo) {
-        formData.append('Images', photo);
-      }
+      formData.append('id', buyCarId); 
 
-      const response = await axios.post(`http://localhost:8000/car/review`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`
-        },
-        {data: buyCarId}
+      photos.forEach((photo, index) => {
+        formData.append(`Images[${index}]`, photo);
       });
+
+      const response = await axios.post(
+        `http://localhost:8000/car/review`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         alert('Review posted successfully');
-        // Handle navigation or refresh to show updated reviews
+      
       } else {
         alert('Failed to post review');
       }
@@ -40,7 +45,8 @@ const ReviewForm = ({ carId }) => {
   };
 
   const handleFileChange = (e) => {
-    setPhoto(e.target.files[0]);
+    const files = Array.from(e.target.files); // Convert FileList to array
+    setPhotos([...photos, ...files]); // Append new files to existing photos array
   };
 
   const handleRatingChange = (newRating) => {
@@ -51,9 +57,14 @@ const ReviewForm = ({ carId }) => {
     <div>
       <h2>Write a Review</h2>
       <form onSubmit={handleSubmit}>
-        <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Write your review..." required />
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Write your review..."
+          required
+        />
         <StarRating rating={rating} onRatingChange={handleRatingChange} />
-        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <input type="file" name='Images' accept="image/*" onChange={handleFileChange} multiple />
         <button type="submit">Submit Review</button>
       </form>
     </div>
