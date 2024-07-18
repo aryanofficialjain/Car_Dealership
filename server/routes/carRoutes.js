@@ -23,7 +23,7 @@ router.get("/car/:id", carControllers.CarDetails);
 router.put("/car/:id",upload.array("carImages", 5), carControllers.UpdateCar);
 router.delete("/car/:id", carControllers.DeleteCar);
 router.post("/review", upload.array("Images", 5), carControllers.Review);
-router.get("/review", carControllers.GetReview);
+router.get("/car/review/:id", carControllers.GetReview);
 
 
 

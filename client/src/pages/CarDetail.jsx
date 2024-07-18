@@ -23,10 +23,9 @@ const CarDetail = () => {
         setCar(response.data);
 
         // Fetch reviews for the car based on car ID
-        const reviewsResponse = await axios.get(`http://localhost:8000/car/reviews/${id}`);
+        const reviewsResponse = await axios.get(`http://localhost:8000/car/car/review/${id}`);
         setReviews(reviewsResponse.data);
 
-        // Check if cartItems is an array before using array methods
         if (Array.isArray(cartItems)) {
           const foundInCart = cartItems.some(item => item._id === response.data._id);
           setIsInCart(foundInCart);
@@ -192,14 +191,14 @@ const CarDetail = () => {
                   </div>
                   <p className="text-gray-300 mb-2">{review.comment}</p>
                   <div className="flex space-x-2">
-                    {review.images.map((image, index) => (
+                    {/* {review.images.map((image, index) => (
                       <img
                         key={index}
-                        src={`http://localhost:8000${image}`}
-                        alt={`Review ${index}`}
+                        src={`http://localhost:8000/car/${image[index]}`}
+                        alt={`Review Images ${index}`}
                         className="max-w-full h-auto rounded-lg"
                       />
-                    ))}
+                    ))} */}
                   </div>
                   <p className="text-gray-400 mt-2">
                     Reviewed by: {review.reviewedBy.username} ({review.reviewedBy.email})
@@ -225,7 +224,7 @@ const CarDetail = () => {
                 <div className="mt-2">
                   <p className="text-xl font-semibold">{car.brand}</p>
                   <p className="text-gray-300">{car.type}</p>
-                </div>
+                </div>  
               </div>
             ))}
           </div>

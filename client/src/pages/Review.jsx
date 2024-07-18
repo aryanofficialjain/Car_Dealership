@@ -2,12 +2,14 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import StarRating from '../components/Rating';
 import Context from '../context/Context';
+import { useNavigate } from 'react-router-dom';
 
 const ReviewForm = () => {
   const [text, setText] = useState('');
   const [rating, setRating] = useState(1);
   const [photos, setPhotos] = useState([]);
   const { token, buyCarId } = useContext(Context);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +36,7 @@ const ReviewForm = () => {
 
       if (response.status === 200) {
         alert('Review posted successfully');
+        navigate("/");
       } else {
         alert('Failed to post review');
       }

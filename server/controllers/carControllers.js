@@ -198,7 +198,7 @@ const Review = async (req, res) => {
 
 
 const GetReview = async (req, res) => {
-  const { carId } = req.params;
+  const carId = req.params.id;
 
   try {
     const car = await Car.findById(carId).populate({
