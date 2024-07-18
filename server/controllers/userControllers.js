@@ -380,4 +380,4 @@ const DeleteAddress = async (req, res) => {
 };
 
 
-module.exports = { loginUser, signupUser, updateUser, deleteUser, profileUser, AddAddress };
+module.exports = { loginUser, signupUser, updateUser, deleteUser, profileUser, AddAddress, UpdateAddress, GetAddress, DeleteAddress };

@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Profile = () => {
-  const { token, setToken, setIsAdmin } = useContext(Context);
+  const { token, setToken, isAdmin } = useContext(Context); // Assuming isAdmin is available in your context
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // State for managing loading state
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [address, setAddress] = useState(null);
 
-  // Fetch user profile information from backend
+  // Function to fetch user profile including address from backend
   const fetchUserProfile = async () => {
     try {
       const response = await axios.get("http://localhost:8000/user/profile", {
@@ -19,19 +20,19 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setUser(response.data.user); // Assuming response.data.user contains user data
-      setLoading(false); // Set loading to false after data is fetched
+      setUser(response.data.user);
+      setAddress(response.data.user.address);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching user profile:", error);
       setError(error.response.data.message || error.message);
-      setLoading(false); // Set loading to false in case of error
+      setLoading(false);
     }
   };
 
   // Function to handle logout
   const handleLogout = () => {
     setToken(null);
-    setIsAdmin(null);
     navigate("/login");
   };
 
@@ -43,17 +44,23 @@ const Profile = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setUser(null); // Clear user data after account deletion
-      handleLogout(); // Log out user after deleting the account
+      setUser(null);
+      setAddress(null);
+      handleLogout();
     } catch (error) {
       console.error("Error deleting account:", error);
       setError(error.response.data.message || error.message);
     }
   };
 
-  // Function to navigate to the update profile route
+  // Function to navigate to update profile route
   const handleUpdate = () => {
     navigate("/update");
+  };
+
+  // Function to navigate to edit address route
+  const handleEditAddress = () => {
+    navigate("/editaddress");
   };
 
   // Effect to fetch user profile data when token changes
@@ -89,6 +96,25 @@ const Profile = () => {
                 <h2 className="text-xl font-bold">{user.username}</h2>
                 <p className="text-sm text-gray-600">{user.email}</p>
               </div>
+              {address ? (
+                <div className="mt-4">
+                  <p className="text-lg font-bold">Address:</p>
+                  <p>{address.city}, {address.country}</p>
+                  <p>Phone: {address.phone}</p>
+                  <p>Pin Code: {address.pinCode}</p>
+                </div>
+              ) : (
+                <div className="flex justify-center mt-4 space-x-4">
+                  {!isAdmin && (
+                    <button
+                      onClick={handleEditAddress}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      Edit Address
+                    </button>
+                  )}
+                </div>
+              )}
               <div className="flex justify-center mt-4 space-x-4">
                 <button
                   onClick={handleLogout}

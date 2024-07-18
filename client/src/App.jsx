@@ -16,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 import Address from "./pages/Address";
 import Pay from "./pages/Pay";
 import Review from "./pages/Review";
+import EditAddress from "./pages/EditAddress";
 
 const App = () => {
   const { token, isAdmin } = useContext(Context);
@@ -23,10 +24,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/address" element={<Address/>}/>
-      <Route path="/pay" element={<Pay/>} />
-      <Route path="/review" element={<Review/>}/>
-      
+
       {/* Routes for non-user (not logged in) */}
       {!token && (
         <>
@@ -42,10 +40,13 @@ const App = () => {
         <>
           <Route path="/profile" element={<Profile />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/address" element={<Address />} />
+          <Route path="/pay" element={<Pay />} />
+          <Route path="/review" element={<Review />} />
+          <Route path="/editaddress" element={<EditAddress />}/>
           <Route path="/car/car/:id" element={<CarDetail />} />
           <Route path="/allcars" element={<AllCar />} />
           <Route path="/update" element={<Update />} />
-
         </>
       )}
 

@@ -31,7 +31,7 @@ router.get("/profile", userControllers.profileUser);
 router.delete("/delete", userControllers.deleteUser);
 router.post("/address", userControllers.AddAddress);
 router.get("/address", userControllers.GetAddress);
-router.put("/addrees", userControllers.UpdateAddress);
+router.put("/address", userControllers.UpdateAddress);
 router.delete("/address", userControllers.DeleteAddress);
 
 
