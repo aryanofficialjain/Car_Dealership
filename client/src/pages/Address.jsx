@@ -35,7 +35,7 @@ const Address = () => {
       };
 
       const response = await axios.post(
-        'http://localhost:8000/cart/address', // Adjust the API endpoint as per your backend
+        'http://localhost:8000/user/address', // Adjust the API endpoint as per your backend
         formData,
         config
       );

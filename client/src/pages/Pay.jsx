@@ -9,13 +9,14 @@ const Pay = () => {
   const navigate = useNavigate();
 
   const handleBuy = async () => {
-    
     try {
       // Check if cartItems has any items
       const carIds =
         cartItems.length > 0
           ? cartItems.map((item) => item._id.toString())
-          : Array.isArray(buyCarId) ? buyCarId : []; // Ensure buyCarId is an array
+          : Array.isArray(buyCarId)
+          ? buyCarId
+          : []; // Ensure buyCarId is an array
 
       console.log("Car IDs:", carIds); // Debugging statement
 
@@ -33,7 +34,11 @@ const Pay = () => {
       if (response.status === 200) {
         alert("Order successfully accepted");
         setBuyerToken(token);
-        navigate("/review");
+        if (cartItems.length == 0) {
+          navigate("/review");
+        } else {
+          navigate("/");
+        }
         // You may want to refresh cart items after successful purchase
         // fetchCartItems(); // Make sure fetchCartItems function is available
       } else {

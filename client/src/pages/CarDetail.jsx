@@ -41,7 +41,7 @@ const CarDetail = () => {
     };
 
     fetchCarDetail();
-  }, [id, cartItems, setCartItems]);
+  }, [id]);
 
   useEffect(() => {
     const fetchSuggestedCars = async () => {

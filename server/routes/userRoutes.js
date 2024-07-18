@@ -29,4 +29,10 @@ router.put(
 );
 router.get("/profile", userControllers.profileUser);
 router.delete("/delete", userControllers.deleteUser);
+router.post("/address", userControllers.AddAddress);
+router.get("/address", userControllers.GetAddress);
+router.put("/addrees", userControllers.UpdateAddress);
+router.delete("/address", userControllers.DeleteAddress);
+
+
 module.exports = router;

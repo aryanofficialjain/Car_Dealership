@@ -240,49 +240,7 @@ const DeleteUserAndCar = async (req, res) => {
 };
 
 
-const AddAddress = async (req, res) => {
-  try {
-    // Extract token from Authorization header
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-    const token = authHeader.split(" ")[1];
-    console.log(token);
 
-    // Verify and decode the token
-    const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
-    if (!decodedToken) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-
-    // Retrieve user based on decoded token
-    const user = await User.findById(decodedToken.id);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Extract address details from request body
-    const { city, country, phone, pinCode } = req.body;
-
-    // Update user's address
-    user.address = {
-      city,
-      country,
-      phone,
-      pinCode,
-    };
-
-    // Save updated user data
-    await user.save();
-
-    // Respond with success message
-    res.status(200).json({ message: "Address added successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
-  }
-};
 
 module.exports = {
   AddItem,
@@ -291,5 +249,4 @@ module.exports = {
   BuyCar,
   DeleteUserAndCar,
   GetUserAndCar,
-  AddAddress,
 };
