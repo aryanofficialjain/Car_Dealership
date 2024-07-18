@@ -5,8 +5,8 @@ import Context from '../context/Context';
 
 const ReviewForm = () => {
   const [text, setText] = useState('');
-  const [rating, setRating] = useState(1); 
-  const [photos, setPhotos] = useState([]); 
+  const [rating, setRating] = useState(1);
+  const [photos, setPhotos] = useState([]);
   const { token, buyCarId } = useContext(Context);
 
   const handleSubmit = async (e) => {
@@ -15,10 +15,10 @@ const ReviewForm = () => {
       const formData = new FormData();
       formData.append('comment', text);
       formData.append('rating', rating);
-      formData.append('id', buyCarId); 
+      formData.append('id', buyCarId);
 
       photos.forEach((photo, index) => {
-        formData.append(`Images[${index}]`, photo);
+        formData.append('Images', photo); // Use 'Images' here to match server's expectation
       });
 
       const response = await axios.post(
@@ -34,7 +34,6 @@ const ReviewForm = () => {
 
       if (response.status === 200) {
         alert('Review posted successfully');
-      
       } else {
         alert('Failed to post review');
       }

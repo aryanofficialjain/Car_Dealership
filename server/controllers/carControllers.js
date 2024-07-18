@@ -171,7 +171,7 @@ const Review = async (req, res) => {
     // Decode the token to get the payload (which should include username)
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY); // Replace with your actual JWT secret
 
-    const username = decodedToken.username;
+    const username = decodedToken.id;
 
     // Prepare the review object
     const newReview = {
@@ -197,4 +197,24 @@ const Review = async (req, res) => {
 };
 
 
-module.exports = { AddCar, AllCar, CarDetails, UpdateCar, DeleteCar, Review };
+const GetReview = async (req, res) => {
+  const { carId } = req.params;
+
+  try {
+    const car = await Car.findById(carId).populate({
+      path: 'reviews.reviewedBy', // Populate the reviewedBy field with user details
+      select: 'username email profileImage', // Specify fields to include from User model
+    });
+
+    if (!car) {
+      return res.status(404).json({ error: 'Car not found' });
+    }
+
+    res.status(200).json(car.reviews); // Return reviews associated with the car
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ error: 'Failed to fetch reviews' });
+  }
+};
+
+module.exports = { AddCar, AllCar, CarDetails, UpdateCar, DeleteCar, Review, GetReview };

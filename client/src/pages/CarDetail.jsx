@@ -3,10 +3,12 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Context } from '../context/Context';
 import Navbar from '../components/Navbar';
+import Rating from '../components/Rating'; // Import Rating component
 
 const CarDetail = () => {
   const [car, setCar] = useState(null);
   const [suggestedCars, setSuggestedCars] = useState([]);
+  const [reviews, setReviews] = useState([]); // State to hold reviews
   const { id } = useParams();
   const { isAdmin, token, cartItems, setCartItems, setbuyCarId } = useContext(Context);
   const [isInCart, setIsInCart] = useState(false);
@@ -19,7 +21,11 @@ const CarDetail = () => {
       try {
         const response = await axios.get(`http://localhost:8000/car/car/${id}`);
         setCar(response.data);
-        
+
+        // Fetch reviews for the car based on car ID
+        const reviewsResponse = await axios.get(`http://localhost:8000/car/reviews/${id}`);
+        setReviews(reviewsResponse.data);
+
         // Check if cartItems is an array before using array methods
         if (Array.isArray(cartItems)) {
           const foundInCart = cartItems.some(item => item._id === response.data._id);
@@ -36,7 +42,7 @@ const CarDetail = () => {
     };
 
     fetchCarDetail();
-  }, [id]);
+  }, [id, cartItems, setCartItems]);
 
   useEffect(() => {
     const fetchSuggestedCars = async () => {
@@ -172,6 +178,36 @@ const CarDetail = () => {
               </>
             )}
           </div>
+        </div>
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+          {reviews.length === 0 && <p>No reviews yet.</p>}
+          {reviews.length > 0 && (
+            <div className="grid grid-cols-1 gap-4">
+              {reviews.map(review => (
+                <div key={review._id} className="bg-gray-800 p-4 rounded-lg">
+                  <div className="flex items-center mb-2">
+                    <Rating rating={review.rating} /> {/* Display star rating */}
+                    <span className="ml-2 text-white">Rating: {review.rating}</span>
+                  </div>
+                  <p className="text-gray-300 mb-2">{review.comment}</p>
+                  <div className="flex space-x-2">
+                    {review.images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={`http://localhost:8000${image}`}
+                        alt={`Review ${index}`}
+                        className="max-w-full h-auto rounded-lg"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-gray-400 mt-2">
+                    Reviewed by: {review.reviewedBy.username} ({review.reviewedBy.email})
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="mt-8">
           <h2 className="text-2xl font-bold mb-4">Suggested Cars</h2>
