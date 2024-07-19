@@ -43,43 +43,84 @@ const CarList = () => {
       <Navbar />
       <div className="container mx-auto p-4">
         <h2 className="text-center mb-4 text-2xl font-bold">Car List</h2>
-        <button onClick={handleAdd} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">Add</button>
+        <button onClick={handleAdd} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg mb-4 block w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500">Add</button>
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border-collapse border-gray-200">
-            <thead>
-              <tr className="bg-gray-200 text-gray-800 uppercase text-sm leading-normal">
-                <th className="py-3 px-6 text-left">Brand</th>
-                <th className="py-3 px-6 text-left">Type</th>
-                <th className="py-3 px-6 text-left">Description</th>
-                <th className="py-3 px-6 text-left">Price</th>
-                <th className="py-3 px-6 text-left">Image</th>
-                <th className="py-3 px-6 text-left">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-600 text-sm font-light">
-              {cars.map((car) => (
-                <tr key={car._id} className="border-b border-gray-200 hover:bg-gray-100">
-                  <td className="py-3 px-6 text-left">{car.brand}</td>
-                  <td className="py-3 px-6 text-left">{car.type}</td>
-                  <td className="py-3 px-6 text-left">{car.description}</td>
-                  <td className="py-3 px-6 text-left">${car.price}</td>
-                  <td className="py-3 px-6 text-left">
-                    {car.carImages && car.carImages.length > 0 && (
-                      <img
-                        src={`http://localhost:8000/car/${car.carImages[0]}`}
-                        alt={car.brand}
-                        className="w-16 h-16 object-cover"
-                      />
-                    )}
-                  </td>
-                  <td className="py-3 px-6 text-left space-x-2">
-                    <button onClick={() => handleUpdate(car._id)} className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">Update</button>
-                    <button onClick={() => handleDelete(car._id)} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="-mx-4 sm:mx-0">
+            <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-200 text-gray-800">
+                      <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                          Brand
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                          Type
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                          Description
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                          Price
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                          Image
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {cars.map((car) => (
+                        <tr key={car._id}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 h-10 w-10">
+                                {car.carImages && car.carImages.length > 0 && (
+                                  <img
+                                    className="h-10 w-10 rounded-full"
+                                    src={`http://localhost:8000/car/${car.carImages[0]}`}
+                                    alt={car.brand}
+                                  />
+                                )}
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium text-gray-900">{car.brand}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">{car.type}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">{car.description}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-gray-900">${car.price}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {car.carImages && car.carImages.length > 0 && (
+                              <img
+                                className="h-16 w-16 object-cover"
+                                src={`http://localhost:8000/car/${car.carImages[0]}`}
+                                alt={car.brand}
+                              />
+                            )}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <button onClick={() => handleUpdate(car._id)} className="text-indigo-600 hover:text-indigo-900">Update</button>
+                            <button onClick={() => handleDelete(car._id)} className="ml-2 text-red-600 hover:text-red-900">Delete</button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

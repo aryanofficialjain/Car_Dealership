@@ -28,8 +28,8 @@ const Home = () => {
   };
 
   const handleClickstart = () => {
-    navigate("/allcars")
-  }
+    navigate("/allcars");
+  };
 
   return (
     <div className='bg-black'>

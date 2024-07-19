@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const Pay = () => {
   const { cartItems, token, setBuyerToken, buyCarId } = useContext(Context);
@@ -34,7 +35,7 @@ const Pay = () => {
       if (response.status === 200) {
         alert("Order successfully accepted");
         setBuyerToken(token);
-        if (cartItems.length == 0) {
+        if (cartItems.length === 0) {
           navigate("/review");
         } else {
           navigate("/");
@@ -56,12 +57,12 @@ const Pay = () => {
   };
 
   return (
-    <div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
-          Select Payment Method:
-        </label>
-        <div className="flex items-center">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-900">
+      <Navbar/>
+      <div className="max-w-md w-full bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold mb-6 text-center">Select Payment Method</h2>
+        
+        <div className="flex items-center mb-4">
           <input
             type="radio"
             id="cod"
@@ -85,10 +86,14 @@ const Pay = () => {
           />
           <label htmlFor="upi">UPI</label>
         </div>
+        
+        <button
+          className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          onClick={handleBuy}
+        >
+          Buy Now
+        </button>
       </div>
-      <button className="bg-red-500 text-white p-3" onClick={handleBuy}>
-        Buy it
-      </button>
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar"; // Assuming you have a Navbar component
+import Navbar from "../components/Navbar";
 import { Context } from "../context/Context";
 
 const Login = () => {
   const [error, setError] = useState(null);
-  const { setToken, setIsAdmin } = useContext(Context); // Use setIsAdmin from Context
+  const { setToken, setIsAdmin } = useContext(Context);
   const navigate = useNavigate();
   const [formdata, setFormdata] = useState({ email: "", password: "" });
 
@@ -28,12 +28,7 @@ const Login = () => {
       console.log(response.data.role);
       if (response.status === 200) {
         setToken(response.data.token);
-        if (response.data.role === "admin") {
-          setIsAdmin(true);
-        } else {
-          setIsAdmin(false);
-        }
-
+        setIsAdmin(response.data.role === "admin");
         navigate("/profile");
       }
     } catch (error) {
@@ -45,7 +40,7 @@ const Login = () => {
     <div className="min-h-screen bg-gray-900 flex flex-col">
       <Navbar />
       <div className="flex-1 flex items-center justify-center">
-        <div className="bg-black text-white mt-8 p-8 rounded-lg shadow-lg w-full sm:w-96">
+        <div className="bg-black text-white mt-8 p-8 rounded-lg shadow-lg w-full sm:max-w-md">
           <h2 className="text-3xl font-semibold mb-4 text-center">Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-6">
@@ -58,7 +53,7 @@ const Login = () => {
                 name="email"
                 value={formdata.email}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 bg-black py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Enter your email address"
                 required
               />
@@ -73,7 +68,7 @@ const Login = () => {
                 name="password"
                 value={formdata.password}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 bg-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 placeholder="Enter your password"
                 required
               />
