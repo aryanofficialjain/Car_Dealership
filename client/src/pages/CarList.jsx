@@ -110,7 +110,7 @@ const CarList = () => {
                             )}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <button onClick={() => handleUpdate(car._id)} className="text-indigo-600 hover:text-indigo-900">Update</button>
+                            {/* <button onClick={() => handleUpdate(car._id)} className="text-indigo-600 hover:text-indigo-900">Update</button> */}
                             <button onClick={() => handleDelete(car._id)} className="ml-2 text-red-600 hover:text-red-900">Delete</button>
                           </td>
                         </tr>

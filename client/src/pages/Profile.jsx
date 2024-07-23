@@ -103,17 +103,7 @@ const Profile = () => {
                   <p>Phone: {address.phone}</p>
                   <p>Pin Code: {address.pinCode}</p>
                 </div>
-              ) : (
-                <div className="flex justify-center mt-4 space-x-4">
-                  {!isAdmin && (
-                    <button
-                      onClick={handleEditAddress}
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      Edit Address
-                    </button>
-                  )}
-                </div>
+              ) : (null
               )}
               <div className="flex justify-center mt-4 space-x-4">
                 <button

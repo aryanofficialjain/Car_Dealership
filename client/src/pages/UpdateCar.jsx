@@ -69,9 +69,9 @@ const UpdateCar = () => {
     }
   };
 
-  const handleFileChange = (e) => {
-    setCarImages([...carImages, ...e.target.files]);
-  };
+  // const handleFileChange = (e) => {
+  //   setCarImages([...carImages, ...e.target.files]);
+  // };
   
 
   return (
@@ -119,7 +119,7 @@ const UpdateCar = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block text-sm font-medium">Car Image:</label>
             <input
               type="file"
@@ -128,7 +128,7 @@ const UpdateCar = () => {
               multiple name="carImages"
               className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
             />
-          </div>
+          </div> */}
           <button
             type="submit"
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -74,38 +74,27 @@ const Address = () => {
     }
   };
 
-  // Function to handle deleting existing address
-  const handleDeleteAddress = async () => {
-    try {
-      const response = await axios.delete('http://localhost:8000/user/address', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (response.status === 200) {
-        setExistingAddress(null); // Clear existing address state upon successful deletion
-      }
-    } catch (error) {
-      console.error('Error deleting address:', error);
-      alert('Error deleting address. Please try again.');
-    }
-  };
-
+  // Function to navigate to the next page (assuming '/pay' is your next route)
   const next = () => {
     navigate("/pay");
-  }
+  };
 
   return (
-    <div className="bg-gray-900 min-h-screen text-white">
+    <div className="bg-gray-900 min-h-screen text-white flex flex-col items-center justify-center">
       <Navbar />
 
-      <button onClick={next}>Next</button>
-      <div className="container mx-auto p-4">
+      {existingAddress && (
+        <button onClick={next} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+          Next
+        </button>
+      )}
+
+      <div className="container mx-auto p-4 bg-gray-800 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4 text-center">
           {existingAddress ? 'Edit Address' : 'Add Address'}
         </h2>
         {existingAddress ? (
-          <div>
+          <div className="text-center">
             <p className="text-lg font-bold">Existing Address:</p>
             <p>{existingAddress.city}, {existingAddress.country}</p>
             <p>Phone: {existingAddress.phone}</p>
@@ -117,16 +106,10 @@ const Address = () => {
               >
                 Edit Address
               </button>
-              <button
-                onClick={handleDeleteAddress}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-              >
-                Delete Address
-              </button>
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="text-center">
             <div className="mb-4">
               <label htmlFor="city" className="block text-sm font-medium">
                 City:
@@ -137,7 +120,7 @@ const Address = () => {
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
+                className="block w-full mt-1 p-2 border rounded-lg bg-gray-900 text-white"
                 required
               />
             </div>
@@ -151,7 +134,7 @@ const Address = () => {
                 name="country"
                 value={formData.country}
                 onChange={handleChange}
-                className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
+                className="block w-full mt-1 p-2 border rounded-lg bg-gray-900 text-white"
                 required
               />
             </div>
@@ -165,7 +148,7 @@ const Address = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
+                className="block w-full mt-1 p-2 border rounded-lg bg-gray-900 text-white"
                 required
               />
             </div>
@@ -179,7 +162,7 @@ const Address = () => {
                 name="pinCode"
                 value={formData.pinCode}
                 onChange={handleChange}
-                className="block w-full mt-1 p-2 border rounded-lg bg-gray-800 text-white"
+                className="block w-full mt-1 p-2 border rounded-lg bg-gray-900 text-white"
                 required
               />
             </div>
