@@ -30,7 +30,7 @@ const CarForm = () => {
 
 
       const res = await axios.post(
-        "http://localhost:8000/car/addcar",
+        "https://car-dealership-ecru.vercel.app/car/addcar",
         formData,
         {
           headers: {

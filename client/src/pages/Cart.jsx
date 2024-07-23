@@ -21,7 +21,7 @@ const Cart = () => {
 
   const fetchCartItems = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/cart/getitem", {
+      const response = await axios.get("https://car-dealership-ecru.vercel.app/cart/getitem", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -37,7 +37,7 @@ const Cart = () => {
     navigate("/address");
     // try {
     //   const carIds = cartItems.map((item) => item._id.toString()); // Ensure item._id is converted to String if necessary
-    //   const response = await axios.post("http://localhost:8000/cart/buy", { ids: carIds }, {
+    //   const response = await axios.post("https://car-dealership-ecru.vercel.app/cart/buy", { ids: carIds }, {
     //     headers: {
     //       Authorization: `Bearer ${token}`,
     //     },
@@ -60,7 +60,7 @@ const Cart = () => {
 
   const handleRemoveItem = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/cart/deleteitem`, {
+      await axios.delete(`https://car-dealership-ecru.vercel.app/cart/deleteitem`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -104,7 +104,7 @@ const Cart = () => {
                   className="bg-black rounded-lg overflow-hidden shadow-lg"
                 >
                   <img
-                    src={`http://localhost:8000/car/${item.carImages[0]}`}
+                    src={`https://car-dealership-ecru.vercel.app/car/${item.carImages[0]}`}
                     alt={`${item.brand} ${item.type}`}
                     className="w-full"
                   />

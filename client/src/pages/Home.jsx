@@ -12,7 +12,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/car/allcars");
+        const response = await axios.get("https://car-dealership-ecru.vercel.app/car/allcars");
         setCars(response.data);
       } catch (error) {
         console.error("Error fetching cars:", error);
@@ -53,7 +53,7 @@ const Home = () => {
               <div className="flex items-center justify-center mb-4">
                 {car.carImages && car.carImages.length > 0 && (
                   <img
-                    src={`http://localhost:8000/car/${car.carImages[0]}`}
+                    src={`https://car-dealership-ecru.vercel.app/car/${car.carImages[0]}`}
                     alt={`${car.brand} ${car.type}`}
                     className="max-w-full h-auto rounded-lg"
                   />

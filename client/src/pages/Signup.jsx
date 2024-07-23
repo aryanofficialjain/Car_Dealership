@@ -36,7 +36,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/signup",
+        "https://car-dealership-ecru.vercel.app/user/signup",
         formData, // Send FormData instead of plain object
         {
           headers: {
