@@ -17,7 +17,19 @@ app.use(express.static(path.resolve("./public")));
 dbConnection(process.env.DB_URL);
 
 // Middleware
-app.use(cors());
+const allowedOrigins = ['https://car-dealership-server.vercel.app/'];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
