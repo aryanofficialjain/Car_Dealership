@@ -17,7 +17,7 @@ app.use(express.static(path.resolve("./public")));
 dbConnection(process.env.DB_URL);
 
 // Middleware
-const allowedOrigins = ['https://car-dealership-server.vercel.app/'];
+const allowedOrigins = ['https://car-dealership-frontend-eta.vercel.app/'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
