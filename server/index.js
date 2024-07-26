@@ -23,6 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
+app.get("/", (req,res) => {
+    res.send("Hello world server is running 🤣")
+})
 app.use("/user", userRoutes);
 app.use("/car", carRoutes);
 app.use("/cart", cartRoutes);
