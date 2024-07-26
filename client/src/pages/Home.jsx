@@ -12,7 +12,8 @@ const Home = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get("https://car-dealership-server.vercel.app/car/allcars");
+        // Axios request with credentials
+        const response = await axios.get("https://car-dealership-server.vercel.app/car/allcars", { withCredentials: true });
         setCars(response.data);
       } catch (error) {
         console.error("Error fetching cars:", error);
@@ -66,6 +67,7 @@ const Home = () => {
               </div>
             </div>
           ))}
+          {error && <p>{error.message}</p>}
         </div>
       </div>
     </div>

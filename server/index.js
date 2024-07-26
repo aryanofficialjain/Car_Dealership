@@ -11,17 +11,6 @@ const cartRoutes = require("./routes/cartRoutes.js");
 
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-  origin: 'https://car-dealership-frontend-eta.vercel.app', // Allow only this origin
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow these methods
-  allowedHeaders: ["Content-Type", "Authorization"] // Allow these headers
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle preflight requests
-
-
 // Serve static files
 app.use(express.static(path.resolve("./public")));
 
@@ -29,6 +18,10 @@ app.use(express.static(path.resolve("./public")));
 dbConnection(process.env.DB_URL);
 
 // Middleware
+app.use(cors({
+  origin: "https://car-dealership-frontend-eta.vercel.app",
+  credentials: true 
+}))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
