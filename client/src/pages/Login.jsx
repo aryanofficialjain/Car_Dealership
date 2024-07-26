@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://car-dealership-ecru.vercel.app/user/login",
+        "https://car-dealership-server.vercel.app/user/login",
         formdata
       );
       console.log(response.data.role);

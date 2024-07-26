@@ -10,7 +10,7 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('https://car-dealership-ecru.vercel.app/car/allcars');
+        const res = await axios.get('https://car-dealership-server.vercel.app/car/allcars');
         setCars(res.data); 
       } catch (error) {
         console.error('Error fetching cars:', error);
@@ -26,7 +26,7 @@ const CarList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://car-dealership-ecru.vercel.app/car/car/${id}`);
+      await axios.delete(`https://car-dealership-server.vercel.app/car/car/${id}`);
       setCars(cars.filter(car => car._id !== id));
       console.log(`Deleted car with id ${id}`);
     } catch (error) {
@@ -81,7 +81,7 @@ const CarList = () => {
                                 {car.carImages && car.carImages.length > 0 && (
                                   <img
                                     className="h-10 w-10 rounded-full"
-                                    src={`https://car-dealership-ecru.vercel.app/car/${car.carImages[0]}`}
+                                    src={`https://car-dealership-server.vercel.app/car/${car.carImages[0]}`}
                                     alt={car.brand}
                                   />
                                 )}
@@ -104,7 +104,7 @@ const CarList = () => {
                             {car.carImages && car.carImages.length > 0 && (
                               <img
                                 className="h-16 w-16 object-cover"
-                                src={`https://car-dealership-ecru.vercel.app/car/${car.carImages[0]}`}
+                                src={`https://car-dealership-server.vercel.app/car/${car.carImages[0]}`}
                                 alt={car.brand}
                               />
                             )}

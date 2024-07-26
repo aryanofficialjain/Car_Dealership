@@ -15,7 +15,7 @@ const Profile = () => {
   // Function to fetch user profile including address from backend
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get("https://car-dealership-ecru.vercel.app/user/profile", {
+      const response = await axios.get("https://car-dealership-server.vercel.app/user/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -39,7 +39,7 @@ const Profile = () => {
   // Function to handle account deletion
   const removeAccount = async () => {
     try {
-      const response = await axios.delete("https://car-dealership-ecru.vercel.app/user/delete", {
+      const response = await axios.delete("https://car-dealership-server.vercel.app/user/delete", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,7 +88,7 @@ const Profile = () => {
               <div className="flex items-center justify-center">
                 <img
                   className="rounded-full w-20 h-20"
-                  src={`https://car-dealership-ecru.vercel.app/${user.profileImage}`}
+                  src={`https://car-dealership-server.vercel.app/${user.profileImage}`}
                   alt="Profile"
                 />
               </div>

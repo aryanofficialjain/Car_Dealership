@@ -14,7 +14,7 @@ const AllCar = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get("https://car-dealership-ecru.vercel.app/car/allcars");
+        const response = await axios.get("https://car-dealership-server.vercel.app/car/allcars");
         setCars(response.data);
         setFilteredCars(response.data);
         setLoading(false); // Set loading to false after data is fetched
@@ -70,7 +70,7 @@ const AllCar = () => {
               <div className="flex items-center justify-center mb-4">
                 {car.carImages && car.carImages.length > 0 && (
                   <img
-                    src={`https://car-dealership-ecru.vercel.app/car/${car.carImages[0]}`}
+                    src={`https://car-dealership-server.vercel.app/car/${car.carImages[0]}`}
                     alt={`${car.brand} ${car.type}`}
                     className="max-w-full h-auto rounded-lg"
                   />

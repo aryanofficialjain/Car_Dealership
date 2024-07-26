@@ -23,7 +23,7 @@ const Pay = () => {
 
       // Make the POST request to your backend
       const response = await axios.post(
-        "https://car-dealership-ecru.vercel.app/cart/buy",
+        "https://car-dealership-server.vercel.app/cart/buy",
         { ids: carIds, paymentMethod }, // Include payment method in the request body
         {
           headers: {

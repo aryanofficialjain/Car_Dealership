@@ -25,7 +25,7 @@ const ReviewForm = () => {
       });
 
       const response = await axios.post(
-        `https://car-dealership-ecru.vercel.app/car/review`,
+        `https://car-dealership-server.vercel.app/car/review`,
         formData,
         {
           headers: {
