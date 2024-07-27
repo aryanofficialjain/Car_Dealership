@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors({
   origin: "*",
+  credentials: true
 }));
 app.use(express.static(path.resolve("./public")));
 app.use(express.json());
