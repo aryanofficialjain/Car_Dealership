@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/userRoutes.js");
 const carRoutes = require("./routes/carRoutes.js");
 const cartRoutes = require("./routes/cartRoutes.js");
+const dbConnection = require("./database/db.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,15 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Connect to the database
-const dbConnection = async (dbUrl) => {
-  try {
-    await mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-    console.log("MongoDB connected");
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-  }
-};
 
 dbConnection(process.env.DB_URL);
 
