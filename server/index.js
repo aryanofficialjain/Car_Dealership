@@ -23,12 +23,11 @@ dbConnection(process.env.DB_URL);
 
 // Routes
 app.get("/", (req, res) => {
-  const serverPort = process.env.PORT || 3000;
   const mongoStatus = mongoose.connection.readyState === 1 ? "Connected" : "Not Connected";
 
   res.send(`
     <h1>Server Status</h1>
-    <p>Server is running on port ${serverPort}</p>
+    <p>Server is running on port ${PORT}</p>
     <p>MongoDB Status: ${mongoStatus}</p>
   `);
 });
