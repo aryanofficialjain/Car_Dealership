@@ -41,7 +41,7 @@ const Update = () => {
       }
 
       const response = await axios.put(
-        "https://car-dealership-server.vercel.app/user/update",
+        "http://localhost:8000/user/update",
         formDataToSend,
         {
           headers: {

@@ -25,7 +25,7 @@ const ReviewForm = () => {
       });
 
       const response = await axios.post(
-        `https://car-dealership-server.vercel.app/car/review`,
+        `http://localhost:8000/car/review`,
         formData,
         {
           headers: {

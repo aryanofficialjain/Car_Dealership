@@ -13,7 +13,7 @@ const Home = () => {
     const fetchCars = async () => {
       try {
         // Axios request with credentials
-        const response = await axios.get("https://car-dealership-server.vercel.app/car/allcars", { withCredentials: true });
+        const response = await axios.get("http://localhost:8000/car/allcars", { withCredentials: true });
         setCars(response.data);
       } catch (error) {
         console.error("Error fetching cars:", error);
@@ -54,7 +54,7 @@ const Home = () => {
               <div className="flex items-center justify-center mb-4">
                 {car.carImages && car.carImages.length > 0 && (
                   <img
-                    src={`https://car-dealership-server.vercel.app/car/${car.carImages[0]}`}
+                    src={`http://localhost:8000/car/${car.carImages[0]}`}
                     alt={`${car.brand} ${car.type}`}
                     className="max-w-full h-auto rounded-lg"
                   />

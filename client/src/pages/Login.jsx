@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://car-dealership-server.vercel.app/user/login",
+        "http://localhost:8000/user/login",
         formdata
       );
       console.log(response.data.role);

@@ -12,7 +12,9 @@ const dbConnection = require("./database/db.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "*",
+}));
 app.use(express.static(path.resolve("./public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
