@@ -32,6 +32,7 @@ app.get("/", (req, res) => {
     <h1>Server Status</h1>
     <p>Server is running on port ${PORT}</p>
     <p>MongoDB Status: ${mongoStatus}</p>
+    <p>mongo db url : ${process.env.DB_URL}</p>
   `);
 });
 
