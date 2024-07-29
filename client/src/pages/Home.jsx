@@ -12,17 +12,18 @@ const Home = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        // Axios request with credentials
-        const response = await axios.get("https://car-dealership-server-03td.onrender.com/car/allcars");
-        setCars(response.data);
+        const response = await axios.get("http://localhost:8000/car/allcars",  {withCredentials: true});
+        console.log(response.data); // Log the response data
+        setCars(Array.isArray(response.data) ? response.data : []); // Ensure cars is an array
       } catch (error) {
         console.error("Error fetching cars:", error);
-        setError(error.message);
+        setError("An error occurred while fetching cars.");
       }
     };
-
+  
     fetchCars();
   }, []);
+  
 
   const handleClick = (carId) => {
     navigate(`/car/car/${carId}`);
@@ -37,8 +38,8 @@ const Home = () => {
       <Navbar />
       <h1 className="text-white text-center mt-8 text-3xl">Welcome to Car Dealership</h1>
       
-      <img src={bg} className='w-full h-[700px] object-cover m-2' alt="" />
-      <button onClick={handleClickstart} className='mx-auto mt-4 mb-4 px-4 py-2 text-white bg-gray-900 rounded-md block hover:bg-gray-800'>
+      <img src={bg} className='w-full h-[700px] object-cover' alt="" />
+      <button onClick={handleClickstart} className='mx-auto px-4 py-2 text-white bg-gray-900 rounded-md block hover:bg-gray-800'>
         Get Started
       </button>
 
@@ -55,7 +56,7 @@ const Home = () => {
               <div className="flex items-center justify-center mb-4">
                 {car.carImages && car.carImages.length > 0 && (
                   <img
-                    src={`https://car-dealership-server-03td.onrender.com/car/${car.carImages[0]}`}
+                    src={`http://localhost:8000/car/${car.carImages[0]}`}
                     alt={`${car.brand} ${car.type}`}
                     className="max-w-full h-auto rounded-lg"
                   />
