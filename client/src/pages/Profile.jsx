@@ -15,7 +15,7 @@ const Profile = () => {
   // Function to fetch user profile including address from backend
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/user/profile", {
+      const response = await axios.get("https://car-dealership-4cnd.onrender.com/user/profile", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -39,7 +39,7 @@ const Profile = () => {
   // Function to handle account deletion
   const removeAccount = async () => {
     try {
-      const response = await axios.delete("http://localhost:8000/user/delete", {
+      const response = await axios.delete("https://car-dealership-4cnd.onrender.com/user/delete", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -88,7 +88,7 @@ const Profile = () => {
               <div className="flex items-center justify-center">
                 <img
                   className="rounded-full w-20 h-20"
-                  src={`http://localhost:8000/${user.profileImage}`}
+                  src={`https://car-dealership-4cnd.onrender.com/${user.profileImage}`}
                   alt="Profile"
                 />
               </div>

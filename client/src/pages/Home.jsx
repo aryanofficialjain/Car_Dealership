@@ -13,7 +13,7 @@ const Home = () => {
     const fetchCars = async () => {
       try {
         // Axios request with credentials
-        const response = await axios.get("http://localhost:8000/car/allcars", { withCredentials: true });
+        const response = await axios.get("https://car-dealership-4cnd.onrender.com/car/allcars", { withCredentials: true });
         setCars(response.data);
       } catch (error) {
         console.error("Error fetching cars:", error);

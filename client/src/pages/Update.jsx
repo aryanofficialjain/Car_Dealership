@@ -41,7 +41,7 @@ const Update = () => {
       }
 
       const response = await axios.put(
-        "http://localhost:8000/user/update",
+        "https://car-dealership-4cnd.onrender.com/user/update",
         formDataToSend,
         {
           headers: {

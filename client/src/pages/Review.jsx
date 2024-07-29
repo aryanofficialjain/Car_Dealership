@@ -25,7 +25,7 @@ const ReviewForm = () => {
       });
 
       const response = await axios.post(
-        `http://localhost:8000/car/review`,
+        `https://car-dealership-4cnd.onrender.com/car/review`,
         formData,
         {
           headers: {
