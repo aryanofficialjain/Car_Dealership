@@ -1,33 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Navbar from '../components/Navbar';
 import bg from "/bg.jpg";
 
 const Home = () => {
-  const [cars, setCars] = useState([]);
-  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        const response = await axios.get("http://localhost:8000/car/allcars",  {withCredentials: true});
-        console.log(response.data); // Log the response data
-        setCars(Array.isArray(response.data) ? response.data : []); // Ensure cars is an array
-      } catch (error) {
-        console.error("Error fetching cars:", error);
-        setError("An error occurred while fetching cars.");
-      }
-    };
-  
-    fetchCars();
-  }, []);
-  
-
-  const handleClick = (carId) => {
-    navigate(`/car/car/${carId}`);
-  };
 
   const handleClickstart = () => {
     navigate("/allcars");
