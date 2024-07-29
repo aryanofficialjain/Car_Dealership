@@ -12,7 +12,7 @@ const dbConnection = require("./database/db.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Middleware
-const allowedOrigins = ['http://localhost:5173', 'https://your-production-frontend-domain.com'];
+const allowedOrigins = ['http://localhost:5173', 'https://car-dealership-frontend-indol.vercel.app'];
 
 app.use(cors({
   origin: function (origin, callback) {
