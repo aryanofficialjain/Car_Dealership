@@ -59,7 +59,7 @@ const Update = () => {
       setError(error);
     }
   };
-
+  
   return (
     <div className="flex flex-col bg-gray-900 items-center justify-center min-h-screen bg-gray-50">
       <Navbar/>
