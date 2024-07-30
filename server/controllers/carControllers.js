@@ -1,5 +1,7 @@
 const Car = require("../models/Car.js");
 const jwt = require("jsonwebtoken");
+const fs = require("fs")
+const path = require("path");
 
 const AddCar = async (req, res) => {
   const { brand, type, description, price } = req.body;

@@ -1,6 +1,9 @@
 const User = require("../models/User.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const path = require("path");
+const fs = require("fs");
+
 
 const signupUser = async (req, res) => {
   const { email, password, username, role } = req.body;
@@ -16,7 +19,6 @@ const signupUser = async (req, res) => {
   if (!email || !password || !username || !role) {
     return res.status(400).json("Fill all input Fields");
   }
-
 
   const hashedpassword = await bcrypt.hash(password, 10);
 
@@ -124,7 +126,7 @@ const updateUser = async (req, res) => {
 
     let admin = false;
 
-    if(role === "admin"){
+    if (role === "admin") {
       admin = true;
     }
 
@@ -152,13 +154,14 @@ const updateUser = async (req, res) => {
       return res.status(404).json("User not found");
     }
 
-    return res.status(200).json({ message: "User update succesfuly", newuser, admin });
+    return res
+      .status(200)
+      .json({ message: "User update succesfuly", newuser, admin });
   } catch (error) {
     console.log("Error while updating the user", error);
     res.status(500).json("An error occurred while updating the user");
   }
 };
-
 
 const deleteUser = async (req, res) => {
   const token = req.headers.authorization;
@@ -170,7 +173,7 @@ const deleteUser = async (req, res) => {
 
   const authToken = token.split(" ")[1];
 
-  if (!token) {
+  if (!authToken) {
     return res.status(401).json("Unauthorized");
   }
 
@@ -184,9 +187,20 @@ const deleteUser = async (req, res) => {
       return res.status(404).json({ message: "Error while deleting User" });
     }
 
+    // Assuming user.profileImage contains only the image filename
+    const profileImagePath = path.join(__dirname, '..', 'public', user.profileImage); // Adjust the path as needed
+
+    fs.unlink(profileImagePath, (err) => {
+      if (err) {
+        console.error("Error while deleting profile image:", err);
+      } else {
+        console.log("Profile image deleted successfully");
+      }
+    });
+
     res.status(200).json({ message: "User deleted Successfully", user });
   } catch (error) {
-    console.log("Error while verify the token", error);
+    console.log("Error while verifying the token", error);
     res.status(500).json("Token is not valid");
   }
 };
@@ -194,7 +208,7 @@ const deleteUser = async (req, res) => {
 const profileUser = async (req, res) => {
   const token = req.headers.authorization;
   console.log(req.body);
-  console.log(req.headers.authorization)
+  console.log(req.headers.authorization);
 
   if (!token) {
     return res.status(401).json("Unauthorized");
@@ -208,7 +222,7 @@ const profileUser = async (req, res) => {
 
     let admin = false;
 
-    if(role === "admin"){
+    if (role === "admin") {
       admin = true;
     }
 
@@ -217,7 +231,7 @@ const profileUser = async (req, res) => {
       return res.status(404).json({ message: "Error while finding  User" });
     }
 
-    res.status(200).json({user, admin});
+    res.status(200).json({ user, admin });
   } catch (error) {
     console.log("Error while fetching profile", error);
     res.status(500).json("Error while fetching the User Profile");
@@ -228,7 +242,7 @@ const AddAddress = async (req, res) => {
   try {
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     const token = authHeader.split(" ")[1];
@@ -272,7 +286,7 @@ const GetAddress = async (req, res) => {
   try {
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     const token = authHeader.split(" ")[1];
@@ -302,7 +316,7 @@ const UpdateAddress = async (req, res) => {
   try {
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     const token = authHeader.split(" ")[1];
@@ -342,12 +356,11 @@ const UpdateAddress = async (req, res) => {
   }
 };
 
-
 const DeleteAddress = async (req, res) => {
   try {
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     const token = authHeader.split(" ")[1];
@@ -379,5 +392,14 @@ const DeleteAddress = async (req, res) => {
   }
 };
 
-
-module.exports = { loginUser, signupUser, updateUser, deleteUser, profileUser, AddAddress, UpdateAddress, GetAddress, DeleteAddress };
+module.exports = {
+  loginUser,
+  signupUser,
+  updateUser,
+  deleteUser,
+  profileUser,
+  AddAddress,
+  UpdateAddress,
+  GetAddress,
+  DeleteAddress,
+};

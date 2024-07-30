@@ -9,7 +9,7 @@ const CarTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://car-dealership-server-utt2.onrender.com/cart/buy");
+        const response = await fetch("http://localhost:8000/cart/buy");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -26,7 +26,7 @@ const CarTable = () => {
 
   const handleDeleteBuyer = async (carId, buyerId) => {
     try {
-      const response = await fetch("https://car-dealership-server-utt2.onrender.com/cart/buy", {
+      const response = await fetch("http://localhost:8000/cart/buy", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +97,7 @@ const CarTable = () => {
                         >
                           <img
                             onClick={() => handleCardDetail(car._id)}
-                            src={`https://car-dealership-server-utt2.onrender.com/car/${car.carImages[0]}`}
+                            src={`http://localhost:8000/${car.carImages[0]}`}
                             alt=""
                             className="w-12 h-12 object-cover rounded-full cursor-pointer"
                           />
@@ -107,7 +107,7 @@ const CarTable = () => {
                       <td className="px-6 py-4 whitespace-nowrap">{buyer.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <img
-                          src={`https://car-dealership-server-utt2.onrender.com/${buyer.profileImage}`}
+                          src={`http://localhost:8000/${buyer.profileImage}`}
                           alt="Profile"
                           className="w-12 h-12 object-cover rounded-full"
                         />

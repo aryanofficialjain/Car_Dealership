@@ -23,7 +23,7 @@ const Pay = () => {
 
       // Make the POST request to your backend
       const response = await axios.post(
-        "https://car-dealership-server-utt2.onrender.com/cart/buy",
+        "http://localhost:8000/cart/buy",
         { ids: carIds, paymentMethod }, // Include payment method in the request body
         {
           headers: {
