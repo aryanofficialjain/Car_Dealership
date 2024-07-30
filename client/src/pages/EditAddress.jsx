@@ -26,7 +26,7 @@ const EditAddress = () => {
           },
         };
 
-        const response = await axios.get('https://car-dealership-server-03td.onrender.com/user/address', config);
+        const response = await axios.get('https://car-dealership-server-utt2.onrender.com/user/address', config);
 
         setFormData({
           city: response.data.city,
@@ -65,7 +65,7 @@ const EditAddress = () => {
         },
       };
 
-      const response = await axios.put('https://car-dealership-server-03td.onrender.com/user/address', formData, config);
+      const response = await axios.put('https://car-dealership-server-utt2.onrender.com/user/address', formData, config);
 
       console.log(response.data); // Log success message or handle response as needed
 

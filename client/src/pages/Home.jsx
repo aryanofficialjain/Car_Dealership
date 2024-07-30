@@ -18,7 +18,7 @@ const Home = () => {
       <button onClick={handleClickstart} className='mx-auto mt-6 px-4 py-2 text-white bg-gray-900 rounded-md block hover:bg-gray-800'>
         Get Started
       </button>
-      <img src={bg} className='w-full h-[700px] object-cover' alt="" />
+      <img src={bg} className='w-full h-screen object-cover' alt="" />
       
 
     </div>
