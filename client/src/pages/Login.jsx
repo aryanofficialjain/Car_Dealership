@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://car-dealership-server-6i5y.onrender.com/user/login",
+        "https://car-dealership-cs3o.onrender.com/user/login",
         formdata
       );
       console.log(response.data.role);

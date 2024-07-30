@@ -16,7 +16,7 @@ const UpdateCar = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const res = await axios.get(`https://car-dealership-server-6i5y.onrender.com/car/car/${id}`);
+        const res = await axios.get(`https://car-dealership-cs3o.onrender.com/car/car/${id}`);
         const car = res.data;
         setBrand(car.brand);
         setType(car.type);
@@ -43,7 +43,7 @@ const UpdateCar = () => {
       }
 
       const res = await axios.put(
-        `https://car-dealership-server-6i5y.onrender.com/car/car/${id}`,
+        `https://car-dealership-cs3o.onrender.com/car/car/${id}`,
         formData,
         {
           headers: {
