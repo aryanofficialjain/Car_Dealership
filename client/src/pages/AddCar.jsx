@@ -30,7 +30,7 @@ const CarForm = () => {
 
 
       const res = await axios.post(
-        "http://localhost:8000/car/addcar",
+        "https://car-dealership-server-6i5y.onrender.com/car/addcar",
         formData,
         {
           headers: {
