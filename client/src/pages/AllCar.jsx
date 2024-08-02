@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import SearchBar from "../components/SearchBar";
 
 const AllCar = () => {
   const [cars, setCars] = useState([]);
-  const [filteredCars, setFilteredCars] = useState([]);
   const [loading, setLoading] = useState(true); // State for managing loading state
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -16,7 +14,6 @@ const AllCar = () => {
       try {
         const response = await axios.get("https://car-dealership-cs3o.onrender.com/car/allcars");
         setCars(response.data);
-        setFilteredCars(response.data);
         setLoading(false); // Set loading to false after data is fetched
       } catch (error) {
         console.error("Error fetching cars:", error);
@@ -27,20 +24,6 @@ const AllCar = () => {
 
     fetchCars();
   }, []);
-
-  const handleSearch = (filters) => {
-    let filtered = cars.filter((car) => {
-      let passFilter = true;
-      
-      if (filters.carType && car.type.toLowerCase() !== filters.carType.toLowerCase()) {
-        passFilter = false;
-      }
-      
-      return passFilter;
-    });
-
-    setFilteredCars(filtered);
-  };
 
   const handleClick = (id) => {
     navigate(`/car/car/${id}`);
@@ -57,11 +40,10 @@ const AllCar = () => {
   return (
     <div className="bg-gray-900 min-h-screen text-white">
       <Navbar />
-      <SearchBar handleSearch={handleSearch} />
       <div className="max-w-4xl mx-auto py-8">
         <h2 className="text-3xl font-bold mb-4">All Cars</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {filteredCars.map((car) => (
+          {cars.map((car) => (
             <div
               key={car._id}
               onClick={() => handleClick(car._id)}
