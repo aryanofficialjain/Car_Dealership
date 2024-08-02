@@ -53,6 +53,41 @@ const AddCar = async (req, res) => {
   }
 };
 
+const AdminCars = async(req,res) => {
+  const token = req.headers.authorization;
+
+  if (!token || !token.startsWith("Bearer ")) {
+    return res
+      .status(401)
+      .json({ error: "Unauthorized: Missing or invalid token" });
+  }
+
+  const authToken = token.split(" ")[1];
+
+  const verifyToken = jwt.verify(authToken, process.env.SECRET_KEY);
+
+  const { role, id } = verifyToken;
+
+  if (role !== "admin") {
+    return res.status(404).json("Your are an Admin");
+  }
+
+  try {
+    const car = await Car.find({addedBy: id})
+
+    if(!car){
+      return res.json({message: "No car Found"});
+    }
+
+    return res.status(200).json({car})
+  
+  } catch (error) {
+    console.log("Error while getting your cars", error)
+    return res.status(500).json({message: "cannot fetch your cars"})
+  }
+
+}
+
 const AllCar = async (req, res) => {
   try {
     const cars = await Car.find({});
@@ -219,4 +254,4 @@ const GetReview = async (req, res) => {
   }
 };
 
-module.exports = { AddCar, AllCar, CarDetails, UpdateCar, DeleteCar, Review, GetReview };
+module.exports = { AddCar, AdminCars, AllCar, CarDetails, UpdateCar, DeleteCar, Review, GetReview };
