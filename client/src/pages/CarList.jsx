@@ -10,7 +10,7 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('https://car-dealership-cs3o.onrender.com/car/admincar');
+        const res = await axios.get('https://car-dealership-cs3o.onrender.com/car/allcars');
         setCars(res.data); 
       } catch (error) {
         console.error('Error fetching cars:', error);
