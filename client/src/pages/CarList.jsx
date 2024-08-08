@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -10,7 +10,7 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('https://car-dealership-cs3o.onrender.com/car/allcars');
+        const res = await axios.get('https://car-dealership-cs3o.onrender.com/car/admincar');
         setCars(res.data); 
       } catch (error) {
         console.error('Error fetching cars:', error);
