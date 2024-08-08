@@ -20,9 +20,6 @@ const CarList = () => {
     fetchCars();
   }, []);
 
-  const handleUpdate = (id) => {
-    navigate(`/update/${id}`);
-  };
 
   const handleDelete = async (id) => {
     try {
