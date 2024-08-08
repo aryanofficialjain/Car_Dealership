@@ -1,29 +1,38 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { AuthContext } from '../context/AuthContext';
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
   const navigate = useNavigate();
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('https://car-dealership-cs3o.onrender.com/car/admincar');
-        setCars(res.data); 
+        const res = await axios.get('https://car-dealership-cs3o.onrender.com/car/admincar', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setCars(res.data.car); 
       } catch (error) {
         console.error('Error fetching cars:', error);
       }
     };
 
     fetchCars();
-  }, []);
-
+  }, [token]);
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://car-dealership-cs3o.onrender.com/car/car/${id}`);
+      await axios.delete(`https://car-dealership-cs3o.onrender.com/car/car/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setCars(cars.filter(car => car._id !== id));
       console.log(`Deleted car with id ${id}`);
     } catch (error) {
@@ -107,7 +116,6 @@ const CarList = () => {
                             )}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {/* <button onClick={() => handleUpdate(car._id)} className="text-indigo-600 hover:text-indigo-900">Update</button> */}
                             <button onClick={() => handleDelete(car._id)} className="ml-2 text-red-600 hover:text-red-900">Delete</button>
                           </td>
                         </tr>
