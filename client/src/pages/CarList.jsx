@@ -2,12 +2,12 @@ import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { AuthContext } from '../context/AuthContext';
+import Context from '../context/Context';
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
   const navigate = useNavigate();
-  const { token } = useContext(AuthContext);
+  const { token } = useContext(Context);
 
   useEffect(() => {
     const fetchCars = async () => {
