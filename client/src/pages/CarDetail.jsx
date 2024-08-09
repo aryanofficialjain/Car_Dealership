@@ -19,11 +19,11 @@ const CarDetail = () => {
   useEffect(() => {
     const fetchCarDetail = async () => {
       try {
-        const response = await axios.get(`https://car-dealership-cs3o.onrender.com/car/car/${id}`);
+        const response = await axios.get(`http://localhost:8000/car/car/${id}`);
         setCar(response.data);
 
         // Fetch reviews for the car based on car ID
-        const reviewsResponse = await axios.get(`https://car-dealership-cs3o.onrender.com/car/car/review/${id}`);
+        const reviewsResponse = await axios.get(`http://localhost:8000/car/car/review/${id}`);
         setReviews(reviewsResponse.data);
 
         if (Array.isArray(cartItems)) {
@@ -46,7 +46,7 @@ const CarDetail = () => {
   useEffect(() => {
     const fetchSuggestedCars = async () => {
       try {
-        const response = await axios.get('https://car-dealership-cs3o.onrender.com/car/allcars');
+        const response = await axios.get('http://localhost:8000/car/allcars');
         const filteredCars = response.data.filter(c => c._id !== id);
         setSuggestedCars(filteredCars);
       } catch (error) {
@@ -61,7 +61,7 @@ const CarDetail = () => {
   const handleAddToCart = async carId => {
     try {
       const response = await axios.post(
-        'https://car-dealership-cs3o.onrender.com/cart/additem',
+        'http://localhost:8000/cart/additem',
         { carid: carId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -75,7 +75,7 @@ const CarDetail = () => {
 
   const handleRemoveFromCart = async carId => {
     try {
-      const response = await axios.delete('https://car-dealership-cs3o.onrender.com/cart/deleteitem', {
+      const response = await axios.delete('http://localhost:8000/cart/deleteitem', {
         headers: { Authorization: `Bearer ${token}` },
         data: { itemId: carId }
       });
@@ -122,7 +122,7 @@ const CarDetail = () => {
             <div className="flex items-center justify-center mb-4">
               {car.carImages && car.carImages.length > 0 && (
                 <img
-                  src={`https://car-dealership-cs3o.onrender.com/${car.carImages[0]}`}
+                  src={`http://localhost:8000/${car.carImages[0]}`}
                   alt={`${car.brand} ${car.type}`}
                   className="max-w-full h-auto rounded-lg"
                 />
@@ -136,7 +136,7 @@ const CarDetail = () => {
                     className="cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
                   >
                     <img
-                      src={`https://car-dealership-cs3o.onrender.com/${image}`}
+                      src={`http://localhost:8000/${image}`}
                       alt={`${car.brand} ${car.type} ${index}`}
                       className="w-full h-auto rounded-lg"
                     />
@@ -194,7 +194,7 @@ const CarDetail = () => {
                     {review.images.map((image, index) => (
                       <img
                         key={index}
-                        src={`https://car-dealership-cs3o.onrender.com/${image[index]}`}
+                        src={`http://localhost:8000/${image[index]}`}
                         alt={`Review Images ${index}`}
                         className="max-w-full h-auto rounded-lg"
                       />
@@ -217,7 +217,7 @@ const CarDetail = () => {
                 className="bg-black rounded-lg p-4 cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
               >
                 <img
-                  src={`https://car-dealership-cs3o.onrender.com/${car.carImages[0]}`}
+                  src={`http://localhost:8000/${car.carImages[0]}`}
                   alt={`${car.brand} ${car.type}`}
                   className="max-w-full h-auto rounded-lg"
                 />

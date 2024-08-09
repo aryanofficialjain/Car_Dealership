@@ -25,7 +25,7 @@ const Address = () => {
   // Function to fetch existing address
   const fetchExistingAddress = async () => {
     try {
-      const response = await axios.get('https://car-dealership-cs3o.onrender.com/user/address', {
+      const response = await axios.get('http://localhost:8000/user/address', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,7 +58,7 @@ const Address = () => {
       };
 
       const response = await axios.post(
-        'https://car-dealership-cs3o.onrender.com/user/address',
+        'http://localhost:8000/user/address',
         formData,
         config
       );

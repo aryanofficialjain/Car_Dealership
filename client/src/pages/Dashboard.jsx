@@ -1,18 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import Context from "../context/Context";
 
 const CarTable = () => {
   const [cars, setCars] = useState([]);
   const navigate = useNavigate();
+  const {token} = useContext(Context);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://car-dealership-cs3o.onrender.com/cart/buy");
+        // Fetch only the cars added by the current admin with populated buyer data
+        const response = await fetch("http://localhost:8000/cart/buy", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Assuming token is stored in localStorage
+          },
+        });
+        
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
+
         const data = await response.json();
         setCars(data.cars); // Assuming 'cars' is returned as an array of objects
       } catch (error) {
@@ -26,10 +35,11 @@ const CarTable = () => {
 
   const handleDeleteBuyer = async (carId, buyerId) => {
     try {
-      const response = await fetch("https://car-dealership-cs3o.onrender.com/cart/buy", {
+      const response = await fetch("http://localhost:8000/cart/buy", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Ensure that the request is authenticated
         },
         body: JSON.stringify({ carId, buyerId }),
       });
@@ -97,7 +107,7 @@ const CarTable = () => {
                         >
                           <img
                             onClick={() => handleCardDetail(car._id)}
-                            src={`https://car-dealership-cs3o.onrender.com/${car.carImages[0]}`}
+                            src={`http://localhost:8000/${car.carImages[0]}`}
                             alt=""
                             className="w-12 h-12 object-cover rounded-full cursor-pointer"
                           />
@@ -107,7 +117,7 @@ const CarTable = () => {
                       <td className="px-6 py-4 whitespace-nowrap">{buyer.email}</td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <img
-                          src={`https://car-dealership-cs3o.onrender.com/${buyer.profileImage}`}
+                          src={`http://localhost:8000/${buyer.profileImage}`}
                           alt="Profile"
                           className="w-12 h-12 object-cover rounded-full"
                         />

@@ -12,23 +12,25 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('https://car-dealership-cs3o.onrender.com/car/admincar', {
+        const res = await axios.get('http://localhost:8000/car/admincar', {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        setCars(res.data.car); 
+        setCars(res.data.cars);  // Corrected line
+        console.log(res.data); 
+        console.log(res.data.cars); 
       } catch (error) {
         console.error('Error fetching cars:', error);
       }
     };
 
     fetchCars();
-  }, [token]);
+  }, [token]);  // Updated dependency
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://car-dealership-cs3o.onrender.com/car/car/${id}`, {
+      await axios.delete(`http://localhost:8000/car/car/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -79,47 +81,55 @@ const CarList = () => {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {cars.map((car) => (
-                        <tr key={car._id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="flex-shrink-0 h-10 w-10">
-                                {car.carImages && car.carImages.length > 0 && (
-                                  <img
-                                    className="h-10 w-10 rounded-full"
-                                    src={`https://car-dealership-cs3o.onrender.com/${car.carImages[0]}`}
-                                    alt={car.brand}
-                                  />
-                                )}
+                      {cars.length > 0 ? (
+                        cars.map((car) => (
+                          <tr key={car._id}>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <div className="flex-shrink-0 h-10 w-10">
+                                  {car.carImages && car.carImages.length > 0 && (
+                                    <img
+                                      className="h-10 w-10 rounded-full"
+                                      src={`http://localhost:8000/${car.carImages[0]}`}
+                                      alt={car.brand}
+                                    />
+                                  )}
+                                </div>
+                                <div className="ml-4">
+                                  <div className="text-sm font-medium text-gray-900">{car.brand}</div>
+                                </div>
                               </div>
-                              <div className="ml-4">
-                                <div className="text-sm font-medium text-gray-900">{car.brand}</div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{car.type}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{car.description}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">${car.price}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {car.carImages && car.carImages.length > 0 && (
-                              <img
-                                className="h-16 w-16 object-cover"
-                                src={`https://car-dealership-cs3o.onrender.com/${car.carImages[0]}`}
-                                alt={car.brand}
-                              />
-                            )}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            <button onClick={() => handleDelete(car._id)} className="ml-2 text-red-600 hover:text-red-900">Delete</button>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">{car.type}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">{car.description}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">${car.price}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {car.carImages && car.carImages.length > 0 && (
+                                <img
+                                  className="h-16 w-16 object-cover"
+                                  src={`http://localhost:8000/${car.carImages[0]}`}
+                                  alt={car.brand}
+                                />
+                              )}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              <button onClick={() => handleDelete(car._id)} className="ml-2 text-red-600 hover:text-red-900">Delete</button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6" className="px-6 py-4 text-center">
+                            No cars available.
                           </td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </table>
                 </div>

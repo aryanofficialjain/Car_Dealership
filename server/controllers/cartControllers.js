@@ -196,22 +196,35 @@ const BuyCar = async (req, res) => {
 };
 
 const GetUserAndCar = async (req, res) => {
-  try {
-    // Fetch all cars and populate 'buyers' array with user details
-    const cars = await Car.find({}).populate({
-      path: "buyers",
-      select: "username profileImage email", // Select fields to populate
-      model: "User", // Model name to populate from
-    });
+  const token = req.headers.authorization;
 
-    // Return cars array with populated buyers for each car
+  if (!token || !token.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Unauthorized: Missing or invalid token" });
+  }
+
+  const authToken = token.split(" ")[1];
+  try {
+    const verifyToken = jwt.verify(authToken, process.env.SECRET_KEY);
+    const { role, id } = verifyToken;
+
+    if (role !== "admin") {
+      return res.status(403).json({ message: "You are not an Admin" });
+    }
+
+    // Fetch only the cars added by the admin that have buyers
+    const cars = await Car.find({ addedBy: id, buyers: { $exists: true, $ne: [] } })
+      .populate({
+        path: "buyers",
+        select: "username profileImage email",
+        model: "User",
+      });
+
     return res.status(200).json({ cars });
   } catch (error) {
     console.error("Error fetching cars and buyers:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 const DeleteUserAndCar = async (req, res) => {
   const { carId, buyerId } = req.body;
 

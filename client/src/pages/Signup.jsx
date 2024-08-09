@@ -36,7 +36,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "https://car-dealership-cs3o.onrender.com/user/signup",
+        "http://localhost:8000/user/signup",
         formData, // Send FormData instead of plain object
         {
           headers: {
