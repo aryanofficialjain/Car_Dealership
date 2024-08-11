@@ -3,7 +3,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const path = require("path");
 const fs = require("fs");
-const SendVerificationEmail = require("../helper/emailhelper.js")
+const SendVerificationEmail = require("../helper/emailhelper.js");
+const axios = require("axios");
 
 const signupUser = async (req, res) => {
   const { email, password, username, role } = req.body;
@@ -28,7 +29,7 @@ const signupUser = async (req, res) => {
       password: hashedpassword,
       role,
       profileImage,
-      code,  // Store the verification code in the user document
+      code, // Store the verification code in the user document
     });
 
     res.status(200).json({ message: "User Created Successfully", user, role });
@@ -44,7 +45,6 @@ const signupUser = async (req, res) => {
   }
 };
 
-
 const verifyUser = async (req, res) => {
   const { username } = req.params;
   const { code: verificationCode } = req.body; // Destructuring with a clearer name
@@ -55,7 +55,9 @@ const verifyUser = async (req, res) => {
 
     // If user is not found or code doesn't match
     if (!user) {
-      return res.status(400).json({ message: "Invalid username or verification code" });
+      return res
+        .status(400)
+        .json({ message: "Invalid username or verification code" });
     }
 
     // Mark the user as verified
@@ -63,27 +65,49 @@ const verifyUser = async (req, res) => {
     await user.save();
 
     // Respond with success message
-    res.status(200).json({ message: "User verified successfully", username: user.username });
+    res
+      .status(200)
+      .json({ message: "User verified successfully", username: user.username });
   } catch (error) {
     console.log("Error while verifying the user:", error);
-    return res.status(500).json({ message: "Error while verifying user", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Error while verifying user", error: error.message });
   }
 };
 
-
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  console.log(req.body);
+  const { email, password, captcha } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json("Fill all the fields");
+  if (!email || !password || !captcha) {
+    return res
+      .status(400)
+      .json("Please fill all the fields and complete the CAPTCHA.");
   }
 
   try {
-    const user = await User.findOne({ email , isVerified: true});
+    // Verify CAPTCHA with Google's API
+    const captchaResponse = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify`,
+      null,
+      {
+        params: {
+          secret: process.env.CAPTCHA_KEY,
+          response: captcha,
+        },
+      }
+    );
+
+    if (!captchaResponse.data.success) {
+      return res.status(400).json({ message: "Captcha verification failed." });
+    }
+
+    const user = await User.findOne({ email, isVerified: true });
 
     if (!user) {
-      return res.status(401).json({ message: "Error while finding User" });
+      return res
+        .status(401)
+        .json({ message: "User not found or not verified." });
     }
 
     const passwordcheck = await bcrypt.compare(password, user.password);
@@ -114,7 +138,7 @@ const loginUser = async (req, res) => {
       .json({ message: "You are logged in Successfully", token, role });
   } catch (error) {
     console.log("Error while logging in", error);
-    res.status(500).json({ message: "Error while logging IN" });
+    res.status(500).json({ message: "Error while logging in" });
   }
 };
 
@@ -440,5 +464,5 @@ module.exports = {
   UpdateAddress,
   GetAddress,
   DeleteAddress,
-  verifyUser
+  verifyUser,
 };

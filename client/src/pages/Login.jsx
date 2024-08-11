@@ -3,12 +3,14 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { Context } from "../context/Context";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
   const [error, setError] = useState(null);
   const { setToken, setIsAdmin } = useContext(Context);
   const navigate = useNavigate();
   const [formdata, setFormdata] = useState({ email: "", password: "" });
+  const [captcha, setcaptcha] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,21 +20,31 @@ const Login = () => {
     }));
   };
 
+  const onChange = (token) => {
+    setcaptcha(token);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!captcha) {
+      setError("Please complete the CAPTCHA.");
+      return;
+    }
+
     try {
       const response = await axios.post(
-        "https://car-dealership-cs3o.onrender.com/user/login",
-        formdata
+        "https://car-dealership-frontend-indol.vercel.app/user/login",
+        { ...formdata, captcha }
       );
-      console.log(response.data.role);
+
       if (response.status === 200) {
         setToken(response.data.token);
         setIsAdmin(response.data.role === "admin");
         navigate("/profile");
       }
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
+      setError("Login failed. Please check your credentials and complete the CAPTCHA.");
     }
   };
 
@@ -75,12 +87,18 @@ const Login = () => {
             </div>
             <div className="text-center">
               <p>
-                Don't have an account?{" "}
+                Do not have an account?{" "}
                 <Link to="/signup" className="text-blue-800">
                   Create Account
                 </Link>
               </p>
               <br />
+              <div className="flex justify-center mb-4">
+                <ReCAPTCHA
+                  sitekey="6LfbWyQqAAAAAO-wxpIGYePTgjBqBIJOiaU_VRig"
+                  onChange={onChange}
+                />
+              </div>
               <button
                 type="submit"
                 className="bg-purple-900 hover:bg-purple-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
@@ -89,6 +107,7 @@ const Login = () => {
               </button>
             </div>
           </form>
+
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
       </div>

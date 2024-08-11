@@ -21,7 +21,7 @@ const Cart = () => {
 
   const fetchCartItems = async () => {
     try {
-      const response = await axios.get("https://car-dealership-cs3o.onrender.com/cart/getitem", {
+      const response = await axios.get("https://car-dealership-frontend-indol.vercel.app/cart/getitem", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -37,7 +37,7 @@ const Cart = () => {
     navigate("/address");
     // try {
     //   const carIds = cartItems.map((item) => item._id.toString()); // Ensure item._id is converted to String if necessary
-    //   const response = await axios.post("https://car-dealership-cs3o.onrender.com/cart/buy", { ids: carIds }, {
+    //   const response = await axios.post("https://car-dealership-frontend-indol.vercel.app/cart/buy", { ids: carIds }, {
     //     headers: {
     //       Authorization: `Bearer ${token}`,
     //     },
@@ -60,7 +60,7 @@ const Cart = () => {
 
   const handleRemoveItem = async (id) => {
     try {
-      await axios.delete(`https://car-dealership-cs3o.onrender.com/cart/deleteitem`, {
+      await axios.delete(`https://car-dealership-frontend-indol.vercel.app/cart/deleteitem`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -104,7 +104,7 @@ const Cart = () => {
                   className="bg-black rounded-lg overflow-hidden shadow-lg"
                 >
                   <img
-                    src={`https://car-dealership-cs3o.onrender.com/${item.carImages[0]}`}
+                    src={`https://car-dealership-frontend-indol.vercel.app/${item.carImages[0]}`}
                     alt={`${item.brand} ${item.type}`}
                     className="w-full"
                   />

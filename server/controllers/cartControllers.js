@@ -212,7 +212,7 @@ const GetUserAndCar = async (req, res) => {
     }
 
     // Fetch only the cars added by the admin that have buyers
-    const cars = await Car.find({ addedBy: id, buyers: { $exists: true, $ne: [] } })
+    const cars = await Car.find({ addedBy: id, buyers: { $exists: true} })
       .populate({
         path: "buyers",
         select: "username profileImage email",

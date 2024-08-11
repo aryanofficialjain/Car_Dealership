@@ -12,7 +12,7 @@ const VerifyCode = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`https://car-dealership-cs3o.onrender.com/user/username/${username}`, {
+      const response = await axios.post(`https://car-dealership-frontend-indol.vercel.app/user/username/${username}`, {
         code,
       });
 

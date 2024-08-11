@@ -26,7 +26,7 @@ const EditAddress = () => {
           },
         };
 
-        const response = await axios.get('https://car-dealership-cs3o.onrender.com/user/address', config);
+        const response = await axios.get('https://car-dealership-frontend-indol.vercel.app/user/address', config);
 
         setFormData({
           city: response.data.city,
@@ -65,7 +65,7 @@ const EditAddress = () => {
         },
       };
 
-      const response = await axios.put('https://car-dealership-cs3o.onrender.com/user/address', formData, config);
+      const response = await axios.put('https://car-dealership-frontend-indol.vercel.app/user/address', formData, config);
 
       console.log(response.data); // Log success message or handle response as needed
 

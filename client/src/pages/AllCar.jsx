@@ -12,7 +12,7 @@ const AllCar = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await axios.get("https://car-dealership-cs3o.onrender.com/car/allcars");
+        const response = await axios.get("https://car-dealership-frontend-indol.vercel.app/car/allcars");
         setCars(response.data);
         setLoading(false); // Set loading to false after data is fetched
       } catch (error) {
@@ -52,7 +52,7 @@ const AllCar = () => {
               <div className="flex items-center justify-center mb-4">
                 {car.carImages && car.carImages.length > 0 && (
                   <img
-                    src={`https://car-dealership-cs3o.onrender.com/${car.carImages[0]}`}
+                    src={`https://car-dealership-frontend-indol.vercel.app/${car.carImages[0]}`}
                     alt={`${car.brand} ${car.type}`}
                     className="max-w-full h-auto rounded-lg"
                   />
