@@ -73,15 +73,16 @@ const verifyUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { email, password, captcha } = req.body;
+  try {
+    const { email, password, captcha } = req.body;
 
-  if (!email || !password || !captcha) {
-    return res
-      .status(400)
-      .json("Please fill all the fields and complete the CAPTCHA.");
-  }
+    if (!email || !password || !captcha) {
+      return res
+        .status(400)
+        .json("Please fill all the fields and complete the CAPTCHA.");
+    }
 
-  const user = await User.findOne({ email, isVerified: true });
+    const user = await User.findOne({ email, isVerified: true });
 
     if (!user) {
       return res
@@ -89,9 +90,9 @@ const loginUser = async (req, res) => {
         .json({ message: "User not found or not verified." });
     }
 
-    const passwordcheck = await bcrypt.compare(password, user.password);
+    const passwordCheck = await bcrypt.compare(password, user.password);
 
-    if (!passwordcheck) {
+    if (!passwordCheck) {
       return res.status(404).json("Password is incorrect");
     }
 
@@ -103,10 +104,11 @@ const loginUser = async (req, res) => {
         role: user.role,
         id: user._id,
       },
-      process.env.SECRET_KEY
+      process.env.SECRET_KEY,
+      { expiresIn: '1h' } // You might want to set an expiration time for the token
     );
 
-    let role = user.role;
+    const role = user.role;
 
     return res
       .cookie("Token", token, {
@@ -114,7 +116,7 @@ const loginUser = async (req, res) => {
         // Add other cookie options as needed for security
       })
       .status(200)
-      .json({ message: "You are logged in Successfully", token, role });
+      .json({ message: "You are logged in successfully", token, role });
   } catch (error) {
     console.log("Error while logging in", error);
     res.status(500).json({ message: "Error while logging in" });
