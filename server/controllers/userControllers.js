@@ -2,7 +2,6 @@ const User = require("../models/User.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const path = require("path");
-const fs = require("fs");
 const SendVerificationEmail = require("../helper/emailhelper.js");
 const axios = require("axios");
 
@@ -29,18 +28,15 @@ const signupUser = async (req, res) => {
       password: hashedpassword,
       role,
       profileImage,
-      code, // Store the verification code in the user document
+      code,
     });
 
     res.status(200).json({ message: "User Created Successfully", user, role });
   } catch (error) {
     console.error("Error during signup:", error);
-
-    // If the email fails to send, make sure you return a 500 response
     if (error.message === "Error sending verification email") {
       return res.status(500).json("Error while sending verification email");
     }
-
     res.status(500).json("Error while creating a User");
   }
 };
@@ -84,6 +80,23 @@ const loginUser = async (req, res) => {
       .status(400)
       .json("Please fill all the fields and complete the CAPTCHA.");
   }
+
+  try {
+    // Verify CAPTCHA with Google's API
+    const captchaResponse = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify`,
+      null,
+      {
+        params: {
+          secret: process.env.CAPTCHA_KEY,
+          response: captcha,
+        },
+      }
+    );
+
+    if (!captchaResponse.data.success) {
+      return res.status(400).json({ message: "Captcha verification failed." });
+    }
 
     const user = await User.findOne({ email, isVerified: true });
 
