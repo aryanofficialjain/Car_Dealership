@@ -81,24 +81,7 @@ const loginUser = async (req, res) => {
       .json("Please fill all the fields and complete the CAPTCHA.");
   }
 
-  try {
-    // Verify CAPTCHA with Google's API
-    const captchaResponse = await axios.post(
-      `https://www.google.com/recaptcha/api/siteverify`,
-      null,
-      {
-        params: {
-          secret: process.env.CAPTCHA_KEY,
-          response: captcha,
-        },
-      }
-    );
-
-    if (!captchaResponse.data.success) {
-      return res.status(400).json({ message: "Captcha verification failed." });
-    }
-
-    const user = await User.findOne({ email, isVerified: true });
+  const user = await User.findOne({ email, isVerified: true });
 
     if (!user) {
       return res
