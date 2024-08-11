@@ -12,7 +12,7 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/car/admincar', {
+        const res = await axios.get('https://car-dealership-cs3o.onrender.com/car/admincar', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -30,7 +30,7 @@ const CarList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/car/car/${id}`, {
+      await axios.delete(`https://car-dealership-cs3o.onrender.com/car/car/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -90,7 +90,7 @@ const CarList = () => {
                                   {car.carImages && car.carImages.length > 0 && (
                                     <img
                                       className="h-10 w-10 rounded-full"
-                                      src={`http://localhost:8000/${car.carImages[0]}`}
+                                      src={`https://car-dealership-cs3o.onrender.com/${car.carImages[0]}`}
                                       alt={car.brand}
                                     />
                                   )}
@@ -113,7 +113,7 @@ const CarList = () => {
                               {car.carImages && car.carImages.length > 0 && (
                                 <img
                                   className="h-16 w-16 object-cover"
-                                  src={`http://localhost:8000/${car.carImages[0]}`}
+                                  src={`https://car-dealership-cs3o.onrender.com/${car.carImages[0]}`}
                                   alt={car.brand}
                                 />
                               )}

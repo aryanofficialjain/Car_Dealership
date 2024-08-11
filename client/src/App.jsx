@@ -17,6 +17,7 @@ import Address from "./pages/Address";
 import Pay from "./pages/Pay";
 import Review from "./pages/Review";
 import EditAddress from "./pages/EditAddress";
+import VerifyCode from "./pages/verifyCode";
 
 const App = () => {
   const { token, isAdmin } = useContext(Context);
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/allcars" element={<AllCar />} />
           <Route path="/car/car/:id" element={<CarDetail />} />
+          <Route path="/verify/:username" element={<VerifyCode />} />
         </>
       )}
 

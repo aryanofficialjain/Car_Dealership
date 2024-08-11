@@ -36,7 +36,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/user/signup",
+        "https://car-dealership-cs3o.onrender.com/user/signup",
         formData, // Send FormData instead of plain object
         {
           headers: {
@@ -48,7 +48,8 @@ const Signup = () => {
       // Handle successful response
       console.log(response.data);
       if (response.status === 200) {
-        navigate("/login"); // Redirect to login page after successful signup
+        const username = response.data.user.username;
+        navigate(`/verify/${username}`); // Redirect to login page after successful signup
       }
     } catch (error) {
       // Handle error

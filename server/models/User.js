@@ -18,6 +18,16 @@ const userSchema = new Schema({
     enum: ["user", "admin"],
     default: "user",
   },
+  isVerified: {
+    type: String,
+    default: false,
+  },
+  code: {
+    type: String,
+  },
+  codeExpiry: {
+    type: Date,
+  },
   profileImage: {
     type: String,
   },

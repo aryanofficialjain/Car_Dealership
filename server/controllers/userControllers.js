@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const path = require("path");
 const fs = require("fs");
-
+const SendVerificationEmail = require("../helper/emailhelper.js")
 
 const signupUser = async (req, res) => {
   const { email, password, username, role } = req.body;
@@ -13,30 +13,63 @@ const signupUser = async (req, res) => {
     profileImage = `${req.file.filename}`;
   }
 
-  console.log(req.file);
-  console.log(req.body);
-
   if (!email || !password || !username || !role) {
     return res.status(400).json("Fill all input Fields");
   }
 
   const hashedpassword = await bcrypt.hash(password, 10);
+  const code = Math.floor(100000 + Math.random() * 900000);
 
   try {
+    await SendVerificationEmail(email, code);
     const user = await User.create({
       username,
       email,
       password: hashedpassword,
       role,
       profileImage,
+      code,  // Store the verification code in the user document
     });
 
     res.status(200).json({ message: "User Created Successfully", user, role });
   } catch (error) {
-    console.log("Error while creating User", error);
+    console.error("Error during signup:", error);
+
+    // If the email fails to send, make sure you return a 500 response
+    if (error.message === "Error sending verification email") {
+      return res.status(500).json("Error while sending verification email");
+    }
+
     res.status(500).json("Error while creating a User");
   }
 };
+
+
+const verifyUser = async (req, res) => {
+  const { username } = req.params;
+  const { code: verificationCode } = req.body; // Destructuring with a clearer name
+
+  try {
+    // Find user by username and verification code
+    const user = await User.findOne({ username, code: verificationCode });
+
+    // If user is not found or code doesn't match
+    if (!user) {
+      return res.status(400).json({ message: "Invalid username or verification code" });
+    }
+
+    // Mark the user as verified
+    user.isVerified = true;
+    await user.save();
+
+    // Respond with success message
+    res.status(200).json({ message: "User verified successfully", username: user.username });
+  } catch (error) {
+    console.log("Error while verifying the user:", error);
+    return res.status(500).json({ message: "Error while verifying user", error: error.message });
+  }
+};
+
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -47,7 +80,7 @@ const loginUser = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email , isVerified: true});
 
     if (!user) {
       return res.status(401).json({ message: "Error while finding User" });
@@ -188,7 +221,12 @@ const deleteUser = async (req, res) => {
     }
 
     // Assuming user.profileImage contains only the image filename
-    const profileImagePath = path.join(__dirname, '..', 'public', user.profileImage); // Adjust the path as needed
+    const profileImagePath = path.join(
+      __dirname,
+      "..",
+      "public",
+      user.profileImage
+    ); // Adjust the path as needed
 
     fs.unlink(profileImagePath, (err) => {
       if (err) {
@@ -402,4 +440,5 @@ module.exports = {
   UpdateAddress,
   GetAddress,
   DeleteAddress,
+  verifyUser
 };

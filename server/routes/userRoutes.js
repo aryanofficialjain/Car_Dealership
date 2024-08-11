@@ -29,6 +29,7 @@ router.put(
 );
 router.get("/profile", userControllers.profileUser);
 router.delete("/delete", userControllers.deleteUser);
+router.post("/username/:username", userControllers.verifyUser);
 router.post("/address", userControllers.AddAddress);
 router.get("/address", userControllers.GetAddress);
 router.put("/address", userControllers.UpdateAddress);
