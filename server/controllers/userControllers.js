@@ -82,7 +82,8 @@ const loginUser = async (req, res) => {
         .json("Please fill all the fields and complete the CAPTCHA.");
     }
 
-    const user = await User.findOne({ email, isVerified: true });
+    if(captcha.length > 0){
+      const user = await User.findOne({ email, isVerified: true });
 
     if (!user) {
       return res
@@ -121,12 +122,13 @@ const loginUser = async (req, res) => {
     console.log("Error while logging in", error);
     res.status(500).json({ message: "Error while logging in" });
   }
-};
+    }
+
 
 const updateUser = async (req, res) => {
   const existingtoken = req.headers.authorization;
   if (!existingtoken) {
-    return res.status(401).json("Unauthorized");
+    return res.status(401).json("Unauthorized mDerchid basdk ");
   }
 
   const authToken = existingtoken.split(" ")[1];
