@@ -82,47 +82,64 @@ const loginUser = async (req, res) => {
         .json("Please fill all the fields and complete the CAPTCHA.");
     }
 
-    if(captcha.length > 0){
-      const user = await User.findOne({ email, isVerified: true });
-
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: "User not found or not verified." });
-    }
-
-    const passwordCheck = await bcrypt.compare(password, user.password);
-
-    if (!passwordCheck) {
-      return res.status(404).json("Password is incorrect");
-    }
-
-    const token = jwt.sign(
+    // Verify the CAPTCHA with Google's reCAPTCHA API
+    const verifyCaptchaResponse = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify`,
+      null, // Since we are sending URL-encoded data, the body is null.
       {
-        username: user.username,
-        email: user.email,
-        profileImage: user.profileImage,
-        role: user.role,
-        id: user._id,
-      },
-      process.env.SECRET_KEY,
-      { expiresIn: '1h' } // You might want to set an expiration time for the token
+        params: {
+          secret: process.env.CAPTCHA_KEY, // Your secret key
+          response: captcha, // The user's CAPTCHA response token
+        },
+      }
     );
 
-    const role = user.role;
+    const { success } = verifyCaptchaResponse.data;
 
-    return res
-      .cookie("Token", token, {
-        httpOnly: true,
-        // Add other cookie options as needed for security
-      })
-      .status(200)
-      .json({ message: "You are logged in successfully", token, role });
+    if (captcha.length > 0 && success) {
+      const user = await User.findOne({ email, isVerified: true });
+
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: "User not found or not verified." });
+      }
+
+      const passwordCheck = await bcrypt.compare(password, user.password);
+
+      if (!passwordCheck) {
+        return res.status(404).json("Password is incorrect");
+      }
+
+      const token = jwt.sign(
+        {
+          username: user.username,
+          email: user.email,
+          profileImage: user.profileImage,
+          role: user.role,
+          id: user._id,
+        },
+        process.env.SECRET_KEY,
+        { expiresIn: '1h' }
+      );
+
+      const role = user.role;
+
+      return res
+        .cookie("Token", token, {
+          httpOnly: true,
+          // Add other cookie options as needed for security
+        })
+        .status(200)
+        .json({ message: "You are logged in successfully", token, role });
+    } else {
+      return res.status(400).json("CAPTCHA verification failed.");
+    }
   } catch (error) {
     console.log("Error while logging in", error);
     res.status(500).json({ message: "Error while logging in" });
   }
-    }
+};
 
 
 const updateUser = async (req, res) => {
