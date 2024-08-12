@@ -8,7 +8,7 @@ const userRoutes = require("./routes/userRoutes.js");
 const carRoutes = require("./routes/carRoutes.js");
 const cartRoutes = require("./routes/cartRoutes.js");
 const dbConnection = require("./database/db.js");
-
+const botRoutes = require("./routes/botRoutes.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -45,6 +45,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRoutes);
 app.use("/car", carRoutes);
 app.use("/cart", cartRoutes);
+app.use("/bot", botRoutes);
 
 // Start the server
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
