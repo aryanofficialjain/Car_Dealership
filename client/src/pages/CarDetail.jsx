@@ -136,7 +136,7 @@ const CarDetail = () => {
                     className="cursor-pointer hover:shadow-lg transition duration-300 ease-in-out"
                   >
                     <img
-                      src={`${import.meta.env.VITE_DOMAIN_URL}/${image}`}
+                      src={image}
                       alt={`${car.brand} ${car.type} ${index}`}
                       className="w-full h-auto rounded-lg"
                     />
