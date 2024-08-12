@@ -4,17 +4,35 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 const SendVerificationEmail = require("../helper/emailhelper.js");
 const axios = require("axios");
+const cloudinary = require("../config/cloudinary.js");
+const fs = require("fs");
+
 
 const signupUser = async (req, res) => {
   const { email, password, username, role } = req.body;
-  let profileImage = null;
-
-  if (req.file) {
-    profileImage = `${req.file.filename}`;
-  }
 
   if (!email || !password || !username || !role) {
     return res.status(400).json("Fill all input Fields");
+  }
+
+  let profileImage = null;
+
+  if (req.file) {
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "profile_images",
+      });
+
+      profileImage = result.secure_url;
+
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error("Failed to delete local file:", err);
+      });
+
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      return res.status(500).json("Error while uploading profile image");
+    }
   }
 
   const hashedpassword = await bcrypt.hash(password, 10);
@@ -40,6 +58,7 @@ const signupUser = async (req, res) => {
     res.status(500).json("Error while creating a User");
   }
 };
+
 
 const verifyUser = async (req, res) => {
   const { username } = req.params;
@@ -145,7 +164,7 @@ const loginUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const existingtoken = req.headers.authorization;
   if (!existingtoken) {
-    return res.status(401).json("Unauthorized mDerchid basdk ");
+    return res.status(401).json("Unauthorized");
   }
 
   const authToken = existingtoken.split(" ")[1];
@@ -153,21 +172,37 @@ const updateUser = async (req, res) => {
     return res.status(401).json("Unauthorized");
   }
 
-  let profileImage = null;
-
   try {
     const verifytoken = jwt.verify(authToken, process.env.SECRET_KEY);
     const { id } = verifytoken;
 
     const { email, username, oldpassword, newpassword, role } = req.body;
 
-    if (req.file) {
-      profileImage = req.file.filename; // Assuming req.file.filename contains the image filename
-    }
-
     const olduser = await User.findById(id);
     if (!olduser) {
       return res.status(404).json("User not found");
+    }
+
+    let profileImage = olduser.profileImage; // Initialize with the existing profile image URL
+
+    if (req.file) {
+      // If a new profile image is uploaded, delete the old one from Cloudinary
+      if (olduser.profileImage) {
+        const publicId = olduser.profileImage.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`profile_images/${publicId}`);
+      }
+
+      // Upload the new profile image to Cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "profile_images",
+      });
+
+      profileImage = result.secure_url;
+
+      // Optionally, delete the local file after uploading to Cloudinary
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error("Failed to delete local file:", err);
+      });
     }
 
     // Check if oldpassword matches the stored hashed password
@@ -191,12 +226,8 @@ const updateUser = async (req, res) => {
       username,
       email,
       role,
+      profileImage, // Update profileImage with the new URL from Cloudinary
     };
-
-    // Add profileImage to updateData if it exists
-    if (profileImage) {
-      updateData.profileImage = profileImage;
-    }
 
     // Update password if newpassword is provided
     if (newpassword) {
@@ -213,12 +244,13 @@ const updateUser = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: "User update succesfuly", newuser, admin });
+      .json({ message: "User updated successfully", newuser, admin });
   } catch (error) {
     console.log("Error while updating the user", error);
     res.status(500).json("An error occurred while updating the user");
   }
 };
+
 
 const deleteUser = async (req, res) => {
   const token = req.headers.authorization;
@@ -299,6 +331,7 @@ const profileUser = async (req, res) => {
     res.status(500).json("Error while fetching the User Profile");
   }
 };
+
 
 const AddAddress = async (req, res) => {
   try {

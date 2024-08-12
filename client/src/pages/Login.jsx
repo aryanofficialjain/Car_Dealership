@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -11,6 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [formdata, setFormdata] = useState({ email: "", password: "" });
   const [captcha, setcaptcha] = useState(null);
+  const recaptchaRef = useRef(null); // Reference for ReCAPTCHA
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,16 +35,27 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "https://car-dealership-frontend-indol.vercel.app/user/login",
+        `${import.meta.env.VITE_DOMAIN_URL}/user/login`,
         { ...formdata, captcha }
-      )
+      );
+
       if (response.status === 200) {
         setToken(response.data.token);
         setIsAdmin(response.data.role === "admin");
         navigate("/profile");
+
+        // Reset form and CAPTCHA
+        setFormdata({ email: "", password: "" });
+        recaptchaRef.current.reset(); // Reset the CAPTCHA
+        setcaptcha(null);
+        setError(null);
       }
     } catch (error) {
       setError("Login failed. Please check your credentials and complete the CAPTCHA.");
+      
+      // Reset CAPTCHA on error
+      recaptchaRef.current.reset();
+      setcaptcha(null);
     }
   };
 
@@ -96,6 +108,7 @@ const Login = () => {
                 <ReCAPTCHA
                   sitekey="6LfbWyQqAAAAAO-wxpIGYePTgjBqBIJOiaU_VRig"
                   onChange={onChange}
+                  ref={recaptchaRef} // Assign ref to ReCAPTCHA
                 />
               </div>
               <button

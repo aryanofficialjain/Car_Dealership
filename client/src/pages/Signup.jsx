@@ -36,7 +36,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "https://car-dealership-frontend-indol.vercel.app/user/signup",
+        `${import.meta.env.VITE_DOMAIN_URL}/user/signup`,
         formData, // Send FormData instead of plain object
         {
           headers: {

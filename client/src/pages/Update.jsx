@@ -41,7 +41,7 @@ const Update = () => {
       }
 
       const response = await axios.put(
-        "https://car-dealership-frontend-indol.vercel.app/user/update",
+        `${import.meta.env.VITE_DOMAIN_URL}/user/update`,
         formDataToSend,
         {
           headers: {

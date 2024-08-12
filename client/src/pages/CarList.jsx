@@ -12,7 +12,7 @@ const CarList = () => {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('https://car-dealership-frontend-indol.vercel.app/car/admincar', {
+        const res = await axios.get(`${import.meta.env.VITE_DOMAIN_URL}/car/admincar`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -30,7 +30,7 @@ const CarList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://car-dealership-frontend-indol.vercel.app/car/car/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_DOMAIN_URL}/car/car/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -90,7 +90,7 @@ const CarList = () => {
                                   {car.carImages && car.carImages.length > 0 && (
                                     <img
                                       className="h-10 w-10 rounded-full"
-                                      src={`https://car-dealership-frontend-indol.vercel.app/${car.carImages[0]}`}
+                                      src={`${car.carImages[0]}`}
                                       alt={car.brand}
                                     />
                                   )}
@@ -113,7 +113,7 @@ const CarList = () => {
                               {car.carImages && car.carImages.length > 0 && (
                                 <img
                                   className="h-16 w-16 object-cover"
-                                  src={`https://car-dealership-frontend-indol.vercel.app/${car.carImages[0]}`}
+                                  src={car.carImages[0]}
                                   alt={car.brand}
                                 />
                               )}

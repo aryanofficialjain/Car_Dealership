@@ -30,7 +30,7 @@ const CarForm = () => {
 
 
       const res = await axios.post(
-        "https://car-dealership-frontend-indol.vercel.app/car/addcar",
+        `${import.meta.env.VITE_DOMAIN_URL}/car/addcar`,
         formData,
         {
           headers: {

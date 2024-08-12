@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 const Profile = () => {
-  const { token, setToken, isAdmin } = useContext(Context); // Assuming isAdmin is available in your context
+  const { token, setToken } = useContext(Context); // Assuming isAdmin is available in your context
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,7 +15,7 @@ const Profile = () => {
   // Function to fetch user profile including address from backend
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get("https://car-dealership-frontend-indol.vercel.app/user/profile", {
+      const response = await axios.get(`${import.meta.env.VITE_DOMAIN_URL}/user/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -39,7 +39,7 @@ const Profile = () => {
   // Function to handle account deletion
   const removeAccount = async () => {
     try {
-      const response = await axios.delete("https://car-dealership-frontend-indol.vercel.app/user/delete", {
+      const response = await axios.delete(`${import.meta.env.VITE_DOMAIN_URL}/user/delete`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -57,11 +57,6 @@ const Profile = () => {
   // Function to navigate to update profile route
   const handleUpdate = () => {
     navigate("/update");
-  };
-
-  // Function to navigate to edit address route
-  const handleEditAddress = () => {
-    navigate("/editaddress");
   };
 
   // Effect to fetch user profile data when token changes
@@ -89,7 +84,7 @@ const Profile = () => {
               <div className="flex items-center justify-center">
                 <img
                   className="rounded-full w-20 h-20"
-                  src={`https://car-dealership-frontend-indol.vercel.app/${user.profileImage}`}
+                  src={user.profileImage}
                   alt="Profile"
                 />
               </div>

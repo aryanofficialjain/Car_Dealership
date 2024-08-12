@@ -17,6 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+
 router.post("/addcar",upload.array("carImages", 5), carControllers.AddCar);
 router.get("/allcars", carControllers.AllCar);
 router.get("/admincar", carControllers.AdminCars);

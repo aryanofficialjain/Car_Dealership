@@ -25,7 +25,7 @@ const Address = () => {
   // Function to fetch existing address
   const fetchExistingAddress = async () => {
     try {
-      const response = await axios.get('https://car-dealership-frontend-indol.vercel.app/user/address', {
+      const response = await axios.get(`${import.meta.env.VITE_DOMAIN_URL}/user/address`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,7 +58,7 @@ const Address = () => {
       };
 
       const response = await axios.post(
-        'https://car-dealership-frontend-indol.vercel.app/user/address',
+        `${import.meta.env.VITE_DOMAIN_URL}/user/address`,
         formData,
         config
       );

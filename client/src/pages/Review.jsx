@@ -25,7 +25,7 @@ const ReviewForm = () => {
       });
 
       const response = await axios.post(
-        `https://car-dealership-frontend-indol.vercel.app/car/review`,
+        `${import.meta.env.VITE_DOMAIN_URL}/car/review`,
         formData,
         {
           headers: {

@@ -16,7 +16,7 @@ const UpdateCar = () => {
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
-        const res = await axios.get(`https://car-dealership-frontend-indol.vercel.app/car/car/${id}`);
+        const res = await axios.get(`${import.meta.env.VITE_DOMAIN_URL}/car/car/${id}`);
         const car = res.data;
         setBrand(car.brand);
         setType(car.type);
@@ -43,7 +43,7 @@ const UpdateCar = () => {
       }
 
       const res = await axios.put(
-        `https://car-dealership-frontend-indol.vercel.app/car/car/${id}`,
+        `${import.meta.env.VITE_DOMAIN_URL}/car/car/${id}`,
         formData,
         {
           headers: {
