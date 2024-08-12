@@ -34,8 +34,13 @@ const Login = () => {
 
     try {
       const response = await axios.post(
+<<<<<<< HEAD
         "https://car-dealership-frontend-indol.vercel.app/user/login",
         { ...formdata, captcha }
+=======
+        "http://localhost:8000/user/login",
+        formdata
+>>>>>>> parent of 16e55fe (Login page now it woking fine)
       );
 
       if (response.status === 200) {
