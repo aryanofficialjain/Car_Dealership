@@ -7,7 +7,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
   const [error, setError] = useState(null);
-  const { setToken, setIsAdmin } = useContext(Context);
+  const { setToken, setIsAdmin, setUserId, setUsername } = useContext(Context);
   const navigate = useNavigate();
   const [formdata, setFormdata] = useState({ email: "", password: "" });
   const [captcha, setcaptcha] = useState(null);
@@ -42,6 +42,8 @@ const Login = () => {
       if (response.status === 200) {
         setToken(response.data.token);
         setIsAdmin(response.data.role === "admin");
+        setUserId(response.data.userId);
+        setUsername(response.data.username)
         navigate("/profile");
 
         // Reset form and CAPTCHA

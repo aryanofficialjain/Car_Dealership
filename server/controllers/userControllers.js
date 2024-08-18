@@ -143,6 +143,8 @@ const loginUser = async (req, res) => {
       );
 
       const role = user.role;
+      const userId = user._id;
+      const username = user.username;
 
       return res
         .cookie("Token", token, {
@@ -150,7 +152,7 @@ const loginUser = async (req, res) => {
           // Add other cookie options as needed for security
         })
         .status(200)
-        .json({ message: "You are logged in successfully", token, role });
+        .json({ message: "You are logged in successfully", token, role, userId, username });
     } else {
       return res.status(400).json("CAPTCHA verification failed.");
     }
@@ -217,17 +219,17 @@ const updateUser = async (req, res) => {
     }
 
     let admin = false;
-
     if (role === "admin") {
       admin = true;
     }
 
-    const updateData = {
-      username,
-      email,
-      role,
-      profileImage, // Update profileImage with the new URL from Cloudinary
-    };
+    const updateData = {};
+
+    // Only include fields in updateData if they are provided in the request body
+    if (username) updateData.username = username;
+    if (email) updateData.email = email;
+    if (role) updateData.role = role;
+    if (profileImage) updateData.profileImage = profileImage;
 
     // Update password if newpassword is provided
     if (newpassword) {

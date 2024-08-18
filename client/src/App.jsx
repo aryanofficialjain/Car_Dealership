@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -18,6 +18,9 @@ import Pay from "./pages/Pay";
 import Review from "./pages/Review";
 import EditAddress from "./pages/EditAddress";
 import VerifyCode from "./pages/verifyCode";
+import Success from "./pages/Success";
+import Falied from "./pages/Failed";
+import Chat from "./pages/Chat";
 
 const App = () => {
   const { token, isAdmin } = useContext(Context);
@@ -34,6 +37,8 @@ const App = () => {
           <Route path="/allcars" element={<AllCar />} />
           <Route path="/car/car/:id" element={<CarDetail />} />
           <Route path="/verify/:username" element={<VerifyCode />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/failed" element={<Falied />} />
         </>
       )}
 
@@ -49,6 +54,7 @@ const App = () => {
           <Route path="/car/car/:id" element={<CarDetail />} />
           <Route path="/allcars" element={<AllCar />} />
           <Route path="/update" element={<Update />} />
+          <Route path="/chat/:roomId" element={<Chat/>}/>
         </>
       )}
 
@@ -61,11 +67,9 @@ const App = () => {
           <Route path="/carlist" element={<CarList />} />
           <Route path="/update/:id" element={<UpdateCar />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/chat/:id" element={<Chat/>}/>
         </>
       )}
-
-      {/* Default route if none of the above matches */}
-      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

@@ -15,12 +15,18 @@ const CarDetail = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [roomId, setRoomId] = useState("")
+
+  const Chat = () => {
+    navigate(`/chat/${roomId}`)
+  }
 
   useEffect(() => {
     const fetchCarDetail = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_DOMAIN_URL}/car/car/${id}`);
         setCar(response.data);
+        setRoomId(response.data.roomId);
 
         // Fetch reviews for the car based on car ID
         const reviewsResponse = await axios.get(`${import.meta.env.VITE_DOMAIN_URL}/car/car/review/${id}`);
@@ -176,6 +182,7 @@ const CarDetail = () => {
                 )}
               </>
             )}
+            <button className='bg-green-500 text-white px-2 py-4' onClick={Chat}>Chat</button>
           </div>
         </div>
         <div className="mt-8">

@@ -19,6 +19,9 @@ const carSchema = new Schema({
   description: {
     type: String,
   },
+  roomId: {
+    type: String
+  },
   addedBy: {
     type: Schema.Types.ObjectId,
     ref: "User",

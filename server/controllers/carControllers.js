@@ -44,6 +44,8 @@ const AddCar = async (req, res) => {
       });
     }
 
+    const RoomId = Math.floor(Math.random()*999999);
+
     const car = await Car.create({
       brand,
       type,
@@ -51,6 +53,7 @@ const AddCar = async (req, res) => {
       price,
       carImages,
       addedBy: id,
+      roomId: RoomId,
     });
 
     if (!car) {

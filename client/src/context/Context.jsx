@@ -8,13 +8,25 @@ export const ContextProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(null); // Ensure default value is null
   const [BuyerToken, setBuyerToken] = useState(null);
   const [buyCarId, setbuyCarId] = useState([]);
+  const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedIsAdmin = localStorage.getItem("isAdmin");
+    const storeduserId = localStorage.getItem("userId");
+    const storedusername = localStorage.getItem("username");
 
     if (storedToken) {
       setToken(storedToken);
+    }
+
+    if(storeduserId){
+      setUserId(storeduserId);
+    }
+
+    if(storedusername){
+      setUsername(storedusername);
     }
 
     if (storedIsAdmin !== null) {
@@ -49,6 +61,10 @@ export const ContextProvider = ({ children }) => {
         buyCarId,
         setBuyerToken,
         BuyerToken,
+        setUserId, 
+        userId,
+        username,
+        setUsername,
       }}
     >
       {children}

@@ -10,45 +10,60 @@ const Pay = () => {
   const navigate = useNavigate();
 
   const handleBuy = async () => {
+    // try {
+    //   // Check if cartItems has any items
+    //   const carIds =
+    //     cartItems.length > 0
+    //       ? cartItems.map((item) => item._id.toString())
+    //       : Array.isArray(buyCarId)
+    //       ? buyCarId
+    //       : []; // Ensure buyCarId is an array
+
+    //   console.log("Car IDs:", carIds); // Debugging statement
+
+    //   // Make the POST request to your backend
+    //   const response = await axios.post(
+    //     `${import.meta.env.VITE_DOMAIN_URL}/cart/buy`,
+    //     { ids: carIds, paymentMethod }, // Include payment method in the request body
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     }
+    //   );
+
+    //   if (response.status === 200) {
+    //     alert("Order successfully accepted");
+    //     setBuyerToken(token);
+    //     if (cartItems.length === 0) {
+    //       navigate("/review");
+    //     } else {
+    //       navigate("/");
+    //     }
+    //     // You may want to refresh cart items after successful purchase
+    //     // fetchCartItems(); // Make sure fetchCartItems function is available
+    //   } else {
+    //     console.error("Failed to purchase cars:", response.data);
+    //     alert("Failed to purchase cars. Please try again later.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error buying cars:", error);
+    //   alert("Failed to purchase cars. Please try again later.");
+    // }
+
     try {
-      // Check if cartItems has any items
-      const carIds =
-        cartItems.length > 0
-          ? cartItems.map((item) => item._id.toString())
-          : Array.isArray(buyCarId)
-          ? buyCarId
-          : []; // Ensure buyCarId is an array
-
-      console.log("Car IDs:", carIds); // Debugging statement
-
-      // Make the POST request to your backend
-      const response = await axios.post(
-        `${import.meta.env.VITE_DOMAIN_URL}/cart/buy`,
-        { ids: carIds, paymentMethod }, // Include payment method in the request body
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      if(paymentMethod === 'upi'){
+        const res = await axios.post(`${import.meta.env.VITE_DOMAIN_URL}/paypal/payment`);
+        console.log(res.data);
+        if(res && res.data){
+          let link = res.data.links[1].href;
+          window.location.href = link;
+          
         }
-      );
-
-      if (response.status === 200) {
-        alert("Order successfully accepted");
-        setBuyerToken(token);
-        if (cartItems.length === 0) {
-          navigate("/review");
-        } else {
-          navigate("/");
-        }
-        // You may want to refresh cart items after successful purchase
-        // fetchCartItems(); // Make sure fetchCartItems function is available
-      } else {
-        console.error("Failed to purchase cars:", response.data);
-        alert("Failed to purchase cars. Please try again later.");
       }
     } catch (error) {
-      console.error("Error buying cars:", error);
-      alert("Failed to purchase cars. Please try again later.");
+      console.error("Error processing UPI payment:", error);
+      alert("Failed to process UPI payment. Please try again later.");
     }
   };
 
