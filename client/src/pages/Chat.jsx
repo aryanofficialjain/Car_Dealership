@@ -13,7 +13,7 @@ const App = () => {
   const [hasJoined, setHasJoined] = useState(false);
 
   useEffect(() => {
-    const socketInstance = io("http://localhost:8000");
+    const socketInstance = io(import.meta.env.VITE_DOMAIN_URL);
     setSocket(socketInstance);
 
     socketInstance.on("connect", () => {

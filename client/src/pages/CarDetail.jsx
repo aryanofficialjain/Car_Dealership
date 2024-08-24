@@ -26,7 +26,8 @@ const CarDetail = () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_DOMAIN_URL}/car/car/${id}`);
         setCar(response.data);
-        setRoomId(response.data.roomId);
+        console.log(response.data);
+        setRoomId(response.data.addedBy);
 
         // Fetch reviews for the car based on car ID
         const reviewsResponse = await axios.get(`${import.meta.env.VITE_DOMAIN_URL}/car/car/review/${id}`);
@@ -201,7 +202,7 @@ const CarDetail = () => {
                     {review.images.map((image, index) => (
                       <img
                         key={index}
-                        src={`${import.meta.env.VITE_DOMAIN_URL}/${image[index]}`}
+                        src={image}
                         alt={`Review Images ${index}`}
                         className="max-w-full h-auto rounded-lg"
                       />
